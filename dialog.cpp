@@ -23,7 +23,7 @@ void Dialog::slotHide()
 
 void Dialog::on_toolButton_clicked()
 {
-    QTimer::singleShot(2000, this, SLOT(slotHide()));  // 这里是一个3秒定时器， 且只执行一次。
+    QTimer::singleShot(500, this, SLOT(slotHide()));  // 这里是一个0.5秒定时器， 且只执行一次。
 }
 
 

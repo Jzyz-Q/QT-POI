@@ -6,87 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
-    <height>569</height>
+    <width>1077</width>
+    <height>497</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>30</y>
-      <width>221</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 75 10pt &quot;Arial&quot;;
-</string>
-    </property>
-    <property name="text">
-     <string>Please select your file:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="SetRange">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>130</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 9pt &quot;Times New Roman&quot;;
-font: 10pt &quot;Arial&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Set Range:</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>70</y>
-      <width>591</width>
-      <height>36</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="styleSheet">
-        <string notr="true">color: rgb(181, 181, 181);
-border-top-color: rgb(255, 170, 127);
-font: 9pt &quot;Segoe UI Historic&quot;;</string>
-       </property>
-       <property name="text">
-        <string>There are currently no files listed, select &quot;select&quot;.</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="start">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Times New Roman&quot;;</string>
-       </property>
-       <property name="text">
-        <string>select</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QSplitter" name="splitter">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>450</y>
+      <x>150</x>
+      <y>370</y>
       <width>211</width>
       <height>34</height>
      </rect>
@@ -105,128 +37,113 @@ font: 9pt &quot;Segoe UI Historic&quot;;</string>
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QSplitter" name="splitter_4">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>180</y>
-      <width>471</width>
-      <height>236</height>
+      <x>86</x>
+      <y>70</y>
+      <width>161</width>
+      <height>231</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="6" column="1">
-      <widget class="QLineEdit" name="la_edit">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
-color: rgb(223, 223, 223);</string>
-       </property>
-       <property name="text">
-        <string>eg: 30.24-31.35</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QSplitter" name="splitter_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <widget class="QDateEdit" name="dateEdit_2"/>
-       <widget class="QDateEdit" name="dateEdit"/>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="Location_ID">
-       <property name="styleSheet">
-        <string notr="true">font: 75 10pt &quot;Arial&quot;;
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+    <widget class="QCheckBox" name="User_ID">
+     <property name="styleSheet">
+      <string notr="true">font: 75 10pt &quot;Arial&quot;;
 selection-color: rgb(206, 206, 206);</string>
-       </property>
-       <property name="text">
-        <string>Location_ID</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="Time">
-       <property name="styleSheet">
-        <string notr="true">font: 75 10pt &quot;Arial&quot;;
+     </property>
+     <property name="text">
+      <string>User_ID</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="Location_ID">
+     <property name="styleSheet">
+      <string notr="true">font: 75 10pt &quot;Arial&quot;;
 selection-color: rgb(206, 206, 206);</string>
-       </property>
-       <property name="text">
-        <string>Time</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="User_ID">
-       <property name="styleSheet">
-        <string notr="true">font: 75 10pt &quot;Arial&quot;;
+     </property>
+     <property name="text">
+      <string>Location_ID</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="Latitude">
+     <property name="styleSheet">
+      <string notr="true">font: 75 10pt &quot;Arial&quot;;
 selection-color: rgb(206, 206, 206);</string>
-       </property>
-       <property name="text">
-        <string>User_ID</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="locationid_edit">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
-color: rgb(223, 223, 223);</string>
-       </property>
-       <property name="text">
-        <string>eg: 1;3;4 or 1-5</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QCheckBox" name="Latitude">
-       <property name="styleSheet">
-        <string notr="true">font: 75 10pt &quot;Arial&quot;;
+     </property>
+     <property name="text">
+      <string>Latitude</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="Longitude">
+     <property name="styleSheet">
+      <string notr="true">font: 75 10pt &quot;Arial&quot;;
 selection-color: rgb(206, 206, 206);</string>
-       </property>
-       <property name="text">
-        <string>Latitude</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="lo_edit">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
-color: rgb(223, 223, 223);</string>
-       </property>
-       <property name="text">
-        <string>eg: 30.24-31.35</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QSplitter" name="splitter_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <widget class="QTimeEdit" name="timeEdit_2"/>
-       <widget class="QTimeEdit" name="timeEdit"/>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QCheckBox" name="Longitude">
-       <property name="styleSheet">
-        <string notr="true">font: 75 10pt &quot;Arial&quot;;
+     </property>
+     <property name="text">
+      <string>Longitude</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="Time">
+     <property name="styleSheet">
+      <string notr="true">font: 75 10pt &quot;Arial&quot;;
 selection-color: rgb(206, 206, 206);</string>
-       </property>
-       <property name="text">
-        <string>Longitude</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
+     </property>
+     <property name="text">
+      <string>Time</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>60</y>
+      <width>201</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
       <widget class="QLineEdit" name="userid_edit">
        <property name="styleSheet">
         <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
 selection-color: rgb(0, 0, 0);
-color: rgb(223, 223, 223);</string>
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="locationid_edit">
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="la_edit">
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lo_edit">
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
+</string>
        </property>
        <property name="text">
         <string/>
@@ -235,13 +152,127 @@ color: rgb(223, 223, 223);</string>
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>270</y>
+      <width>201</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QSplitter" name="splitter_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label">
+        <property name="styleSheet">
+         <string notr="true">font: 75 10pt &quot;Arial&quot;;</string>
+        </property>
+        <property name="text">
+         <string>start:</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dateEdit"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_2">
+        <property name="styleSheet">
+         <string notr="true">font: 75 10pt &quot;Arial&quot;;</string>
+        </property>
+        <property name="text">
+         <string>end:</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dateEdit_2"/>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>20</y>
+      <width>511</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 9pt &quot;Times New Roman&quot;;
+font: 10pt &quot;Arial&quot;;</string>
+    </property>
+    <property name="title">
+     <string>Function</string>
+    </property>
+    <widget class="QComboBox" name="fctBox">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>40</y>
+       <width>341</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>40</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>100</y>
+       <width>121</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Introduction:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>481</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 9pt &quot;Times New Roman&quot;;
+font: 10pt &quot;Arial&quot;;</string>
+    </property>
+    <property name="title">
+     <string>Set Range</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>740</width>
+     <width>1077</width>
      <height>29</height>
     </rect>
    </property>

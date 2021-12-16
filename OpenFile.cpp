@@ -48,13 +48,8 @@ void Openf::run(){
         tmp.User_Id = list.at(0).toInt();
         tmp.Location_Id = list.at(1).toInt();
 
-
-        tmp.t.year = list.at(2).mid(0,4).toInt();
-        tmp.t.mon = list.at(2).mid(5,2).toInt();
-        tmp.t.day = list.at(2).mid(8,2).toInt();
-        tmp.t.hour = list.at(2).mid(11,2).toInt();
-        tmp.t.minute = list.at(2).mid(14,2).toInt();
-        tmp.t.second = list.at(2).mid(17,2).toInt();
+        tmp.t.day.setDate(list.at(2).mid(0,4).toInt(),list.at(2).mid(5,2).toInt(),list.at(2).mid(8,2).toInt());
+        tmp.t.moment.setHMS(list.at(2).mid(11,2).toInt(),list.at(2).mid(14,2).toInt(),list.at(2).mid(17,2).toInt());
 
         tmp.latitude = list.at(3).toFloat();
         tmp.longitude = list.at(4).toFloat();

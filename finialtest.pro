@@ -1,6 +1,10 @@
 QT       += core gui
+QT += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = BaiduMap
+TEMPLATE = app
 
 CONFIG += c++11
 
@@ -19,6 +23,7 @@ SOURCES += \
     OpenFile.cpp \
     Setting.cpp \
     dialog.cpp \
+    function.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -26,10 +31,12 @@ HEADERS += \
     OpenFile.h \
     Setting.h \
     dialog.h \
+    function.h \
     mainwindow.h
 
 FORMS += \
     dialog.ui \
+    function.ui \
     mainwindow.ui
 
 # Default rules for deployment.
