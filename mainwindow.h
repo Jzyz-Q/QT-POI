@@ -28,6 +28,14 @@ struct Time
         day = d;
         moment = m;
     }
+
+    bool operator<=(Time tmp){
+        return day < tmp.day || (day == tmp.day && moment <= tmp.moment) ;
+    }
+
+    bool operator>=(Time tmp){
+        return day > tmp.day || (day == tmp.day && moment >= tmp.moment);
+    }
 };
 
 struct Datas

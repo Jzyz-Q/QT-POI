@@ -24,7 +24,8 @@ void Function::rec_dataset(Datas da){
 }
 
 void Function::start(){
-    Top10POIs();
+    //NumberOfCheckin();
+    DAU();
 }
 
 void Function::test(){
@@ -243,7 +244,6 @@ void Function::Top10POIs(){
         }
         else {
             cnt++;
-            qDebug() << cnt << endl;
             id = tmpid;
             u[cnt] = new QVector<lct_cnt>;
             u1[cnt] = new QVector<lct_cnt>;
@@ -263,7 +263,6 @@ void Function::Top10POIs(){
 
     for (int i=0; i<=cnt; i++){
         for (int j=0; j<u[i]->size(); j++){
-            qDebug() << "zhixing " << j << endl;
             int t = std::count(u1[i]->begin(),u1[i]->end(),u[i]->at(j));
             if (t > 0)
                 continue;
@@ -311,25 +310,194 @@ void Function::Top10POIs(){
 }
 
 void Function::NumberOfCheckin(){
-    Time t_start, t_end;
-    QVector<Datas>* tmp_by_day = new QVector<Datas>;
+    Time t_start(ui->dateTimeEdit->date(),ui->dateTimeEdit->time());
+    Time t_end(ui->dateTimeEdit_2->date(),ui->dateTimeEdit_2->time());
+    QDate t_min, t_max;
+    t_min.setDate(2010,1,1);
+    t_max.setDate(2010,12,31);
+    int cnt[1000];
 
-    for (int i=0; i<DataSet.size(); i++){
-        Datas tmp = DataSet.at(i);
-        tmp.filter_flag = 1;
-        tmp_by_day->append(tmp);
+    for (int i=0; i<1000; i++) {
+        cnt[i] = 0;
     }
-    std::sort(tmp_by_day->begin(),tmp_by_day->end());
-    t_start = ()
+
+    ckin_loid = ui->lineEdit->text().toInt();
+    for (int i=0; i<DataSet.size(); i++){
+        if (DataSet.at(i).t.day <= t_end.day && DataSet.at(i).t.day >= t_start.day && DataSet.at(i).Location_Id == ckin_loid){
+            //qDebug() << DataSet.at(i).t.day << DataSet.at(i).User_Id << " " << DataSet.at(i).Location_Id;
+            int tmp = t_start.day.daysTo(DataSet.at(i).t.day);
+            cnt[tmp]++;
+            //qDebug() << tmp << " " << cnt[tmp];
+        }
+    }
+
+    QChart *chart = new QChart();
+    QLineSeries* line1 = new QLineSeries;
+    QDateTimeAxis* x = new QDateTimeAxis;
+    QValueAxis* y = new QValueAxis;
+
+    //
+    QLegend *mlegend = chart->legend();
+    mlegend->setAlignment(Qt::AlignBottom);
+    mlegend->show();
+
+    //add point
+    for(int i = 0 ;i < t_start.day.daysTo(t_end.day);i++){
+        QDateTime t;
+        t.setDate(t_start.day.addDays(i));
+        t.setTime(QTime(0,0,0));
+        line1->append(t.toMSecsSinceEpoch(), cnt[i]);
+        //qDebug() << line1->at(i).x() << " " << line1->at(i).y();
+    }
+    chart->addSeries(line1);
+
+    //set xOy
+    chart->setAnimationOptions(QChart::AllAnimations);
+    x->setFormat("yyyy.MM.dd");
+    chart->addAxis(x, Qt::AlignBottom);
+    chart->addAxis(y,Qt::AlignLeft);
+    line1->attachAxis(x);
+    line1->attachAxis(y);
+
+    //show
+    QChartView *view = new QChartView(chart);
+    view->setRenderHint(QPainter::Antialiasing);
+    view->QChartView::setRubberBand(QChartView::RectangleRubberBand);
+    QGridLayout *baseLayout = new QGridLayout();
+    baseLayout->addWidget(view, 1, 0);
+    ui->ckinchart->setLayout(baseLayout);
+}
+
+void Function::checkNumberOfCheckin(){
+    QChart *chart = new QChart();
+    QLineSeries* mLineSeries = new QLineSeries();
+
+    chart->addSeries(mLineSeries);
+
 }
 
 
+void Function::DAU(){
+    QVector<int>* lo_u[1000];
+    Time t_start(ui->dateTimeEdit_3->date(),ui->dateTimeEdit_3->time());
+    Time t_end(ui->dateTimeEdit_4->date(),ui->dateTimeEdit_4->time());
+    int index_lo[10000];
+    int lo_index[10000];
+    int cnt[10000];
+    int crt_index = -1;
+    int ans1 = 0;
+    int ans2 = 0;
+    int user1[10000];
+    int user2[10000];
+    bool flag[10000];
+    bool visited[10000];
 
+    for (int i=0; i<10000; i++){
+        flag[i] = false;
+        cnt[i] = 0;
+        visited[i] = false;
+        user1[i] = 0;
+        user2[i] = 0;
+    }
 
+    for (int i=0; i<DataSet.size(); i++){
+        Datas tmp = DataSet.at(i);
 
+        if (tmp.t <= t_end && tmp.t >= t_start){
+            if (flag[tmp.Location_Id] == false){
+                flag[tmp.Location_Id] = true;
+                ui->locationBox->addItem(QString::number(tmp.Location_Id,10));
 
+                index_lo[++crt_index] = tmp.Location_Id;
+                lo_index[tmp.Location_Id] = crt_index;
 
+                lo_u[lo_index[tmp.Location_Id]] = new QVector<int>;
+                lo_u[lo_index[tmp.Location_Id]]->append(tmp.User_Id);
 
+                //qDebug() << index_lo[crt_index] << " " << crt_index;
+            }
+            else {
+                lo_u[lo_index[tmp.Location_Id]]->append(tmp.User_Id);
+            }
+        }
+    }
 
+    QChart *chart1 = new QChart();
+    QChart *chart2 = new QChart();
 
+    QPieSeries *series1 = new QPieSeries(chart1);
+    QPieSeries *series2 = new QPieSeries(chart2);
 
+    DAU_loid1 = 32;
+    DAU_loid2 = 520;
+
+    //set location1
+    for (int i=0; i<lo_u[lo_index[DAU_loid1]]->size(); i++){
+        if (!visited[lo_u[lo_index[DAU_loid1]]->at(i)]){
+            visited[lo_u[lo_index[DAU_loid1]]->at(i)] = true;
+            user1[ans1++] = lo_u[lo_index[DAU_loid1]]->at(i);
+        }
+        cnt[lo_u[lo_index[DAU_loid1]]->at(i)]++;
+        //qDebug()<<cnt[lo_u[lo_index[DAU_loid1]]->at(i)] ;
+    }
+
+    for (int i=0; i<ans1; i++){
+        QString name = "User " + QString::number(user1[i]);
+        series1->append(name,cnt[user1[i]]);
+        //qDebug()<< i << " " << cnt[user1[i]] ;
+    }
+
+    //set location2
+    for (int i=0; i<lo_u[lo_index[DAU_loid2]]->size(); i++){
+        if (!visited[lo_u[lo_index[DAU_loid2]]->at(i)]){
+            visited[lo_u[lo_index[DAU_loid2]]->at(i)] = true;
+            user2[ans2++] = lo_u[lo_index[DAU_loid2]]->at(i);
+        }
+        cnt[lo_u[lo_index[DAU_loid2]]->at(i)]++;
+    }
+
+    for (int i=0; i<ans2; i++){
+        QString name = "User " + QString::number(user2[i]);
+        series2->append(name,cnt[user2[i]]);
+        //qDebug()<< i << " " << cnt[user2[i]] ;
+    }
+
+    chart1->addSeries(series1);
+    chart2->addSeries(series2);
+
+    //series1->setHoleSize(0.25);//饼图中间空心的比例
+    //series2->setHoleSize(0.25);
+
+    //show
+    QChartView *view1 = new QChartView(chart1);
+    QChartView *view2 = new QChartView(chart2);
+    //view1->setRenderHint(QPainter::Antialiasing);
+    //view2->setRenderHint(QPainter::Antialiasing);
+    //view1->QChartView::setRubberBand(QChartView::RectangleRubberBand);
+    //view2->QChartView::setRubberBand(QChartView::RectangleRubberBand);
+    QGridLayout *baseLayout1 = new QGridLayout();
+    QGridLayout *baseLayout2 = new QGridLayout();
+    baseLayout1->addWidget(view1, 1, 0);
+    baseLayout2->addWidget(view2, 1, 0);
+    ui->DAU_1->setLayout(baseLayout1);
+    ui->DAU_2->setLayout(baseLayout2);
+}
+
+void Function::paintDAU(){
+
+}
+
+void Function::on_DAUBox1_currentIndexChanged(const QString &arg1)
+{
+    DAU_loid1 = arg1.toInt();
+}
+
+void Function::on_DAUBox_2_currentIndexChanged(const QString &arg1)
+{
+    DAU_loid2 = arg1.toInt();
+}
+
+void Function::on_locationBox_currentIndexChanged(const QString &arg1)
+{
+
+}

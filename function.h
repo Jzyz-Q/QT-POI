@@ -57,12 +57,22 @@ public:
     void linetest();
     void Top10POIs();
     void NumberOfCheckin();
+    void checkNumberOfCheckin();
+    void DAU();
+    void paintDAU();
     void handleMarkerClicked();
     void PointHoverd(const QPointF &point, bool state);
 
 public slots:
     void start();
     void rec_dataset(Datas da);
+
+private slots:
+    void on_locationBox_currentIndexChanged(const QString &arg1);
+
+    void on_DAUBox1_currentIndexChanged(const QString &arg1);
+
+    void on_DAUBox_2_currentIndexChanged(const QString &arg1);
 
 private:
     QVector<Datas> DataSet;
@@ -71,6 +81,10 @@ private:
     QValueAxis* mAxY;
     QValueAxis* mAxX;
     QLineSeries* mLineSeries;
+
+    int ckin_loid;
+    int DAU_loid1;
+    int DAU_loid2;
 
 };
 

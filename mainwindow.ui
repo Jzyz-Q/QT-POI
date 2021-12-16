@@ -14,29 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QSplitter" name="splitter">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>370</y>
-      <width>211</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-    <widget class="QPushButton" name="reset">
-     <property name="text">
-      <string>reset all</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="next">
-     <property name="text">
-      <string>next</string>
-     </property>
-    </widget>
-   </widget>
    <widget class="QSplitter" name="splitter_4">
     <property name="geometry">
      <rect>
@@ -94,107 +71,6 @@ selection-color: rgb(206, 206, 206);</string>
       <string>Time</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>60</y>
-      <width>201</width>
-      <height>201</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLineEdit" name="userid_edit">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
-selection-color: rgb(0, 0, 0);
-</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="locationid_edit">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
-</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="la_edit">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
-</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lo_edit">
-       <property name="styleSheet">
-        <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
-</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>270</y>
-      <width>201</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QSplitter" name="splitter_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <widget class="QLabel" name="label">
-        <property name="styleSheet">
-         <string notr="true">font: 75 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>start:</string>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="dateEdit"/>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSplitter" name="splitter_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <widget class="QLabel" name="label_2">
-        <property name="styleSheet">
-         <string notr="true">font: 75 10pt &quot;Arial&quot;;</string>
-        </property>
-        <property name="text">
-         <string>end:</string>
-        </property>
-       </widget>
-       <widget class="QDateEdit" name="dateEdit_2"/>
-      </widget>
-     </item>
-    </layout>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
@@ -265,7 +141,134 @@ font: 10pt &quot;Arial&quot;;</string>
     <property name="title">
      <string>Set Range</string>
     </property>
+    <widget class="QSplitter" name="splitter">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>350</y>
+       <width>211</width>
+       <height>34</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QPushButton" name="reset">
+      <property name="text">
+       <string>reset all</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="next">
+      <property name="text">
+       <string>next</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>250</y>
+       <width>201</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QSplitter" name="splitter_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label">
+         <property name="styleSheet">
+          <string notr="true">font: 75 10pt &quot;Arial&quot;;</string>
+         </property>
+         <property name="text">
+          <string>start:</string>
+         </property>
+        </widget>
+        <widget class="QDateEdit" name="dateEdit"/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSplitter" name="splitter_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_2">
+         <property name="styleSheet">
+          <string notr="true">font: 75 10pt &quot;Arial&quot;;</string>
+         </property>
+         <property name="text">
+          <string>end:</string>
+         </property>
+        </widget>
+        <widget class="QDateEdit" name="dateEdit_2"/>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>40</y>
+       <width>201</width>
+       <height>201</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLineEdit" name="userid_edit">
+        <property name="styleSheet">
+         <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
+selection-color: rgb(0, 0, 0);
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="locationid_edit">
+        <property name="styleSheet">
+         <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="la_edit">
+        <property name="styleSheet">
+         <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lo_edit">
+        <property name="styleSheet">
+         <string notr="true">font: 9pt &quot;Segoe UI Historic&quot;;
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
+   <zorder>groupBox_2</zorder>
+   <zorder>splitter_4</zorder>
+   <zorder>groupBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
