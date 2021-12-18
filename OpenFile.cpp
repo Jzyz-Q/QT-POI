@@ -8,6 +8,7 @@
 #include "QPushButton"
 #include "QTextStream"
 #include "iostream"
+#include "QMessageBox"
 
 Openf::Openf(QWidget *parent, QVector<Datas>*& d)
     : QThread(parent)
@@ -29,6 +30,7 @@ void Openf::rec(QString fn){
 void Openf::run(){
     qDebug() << "当前子线程ID:" << QThread::currentThreadId();
     QFile file(filename);
+
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             qDebug() << "Open Excel file failed!";

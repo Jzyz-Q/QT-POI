@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     //function
     fui = new Function(this);
     connect(Set_th2,&Setting::SendDataset,fui,&Function::rec_dataset);
+    connect(Set_th2,&Setting::SendFinishedSignal,fui,&Function::rec_finished);
 }
 
 MainWindow::~MainWindow()

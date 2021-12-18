@@ -41,6 +41,7 @@ private:
 
 signals:
     void SendDataset(Datas da);
+    void SendFinishedSignal(int a);
 
 };
 #endif // SETTING_H

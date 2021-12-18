@@ -48,6 +48,7 @@ void Setting::run(){
     }
     qDebug()<< AfterSelect->size() <<endl;
     u_f = lct_f = t_f = lo_f = la_f = false;
+    emit SendFinishedSignal(-1);
 }
 
 void Setting::rec_users(QString users){
