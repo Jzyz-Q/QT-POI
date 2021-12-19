@@ -16,14 +16,14 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
+     <x>20</x>
+     <y>20</y>
      <width>1261</width>
-     <height>861</height>
+     <height>891</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
@@ -80,9 +80,9 @@ font: 10pt &quot;Arial&quot;;</string>
        <hour>0</hour>
        <minute>0</minute>
        <second>0</second>
-       <year>2010</year>
-       <month>1</month>
-       <day>1</day>
+       <year>2009</year>
+       <month>2</month>
+       <day>4</day>
       </datetime>
      </property>
     </widget>
@@ -113,10 +113,10 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -132,16 +132,16 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="value">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="sliderPosition">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -179,9 +179,22 @@ font: 10pt &quot;Arial&quot;;</string>
        <minute>0</minute>
        <second>0</second>
        <year>2010</year>
-       <month>12</month>
-       <day>31</day>
+       <month>10</month>
+       <day>23</day>
       </datetime>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="top_ok">
+     <property name="geometry">
+      <rect>
+       <x>1150</x>
+       <y>130</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>OK!</string>
      </property>
     </widget>
    </widget>
@@ -202,8 +215,8 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QWidget" name="layoutWidget_2">
      <property name="geometry">
       <rect>
-       <x>420</x>
-       <y>780</y>
+       <x>419</x>
+       <y>773</y>
        <width>821</width>
        <height>52</height>
       </rect>
@@ -288,8 +301,8 @@ font: 10pt &quot;Arial&quot;;</string>
        <minute>0</minute>
        <second>0</second>
        <year>2010</year>
-       <month>12</month>
-       <day>31</day>
+       <month>10</month>
+       <day>23</day>
       </datetime>
      </property>
     </widget>
@@ -307,9 +320,9 @@ font: 10pt &quot;Arial&quot;;</string>
        <hour>0</hour>
        <minute>0</minute>
        <second>0</second>
-       <year>2010</year>
-       <month>1</month>
-       <day>1</day>
+       <year>2009</year>
+       <month>2</month>
+       <day>4</day>
       </datetime>
      </property>
     </widget>
@@ -323,16 +336,16 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="value">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="sliderPosition">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -382,10 +395,10 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -437,49 +450,52 @@ font: 10pt &quot;Arial&quot;;</string>
      </widget>
      <widget class="QComboBox" name="cot_user_Box1"/>
     </widget>
-    <widget class="QSplitter" name="splitter_3">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>377</x>
+       <x>388</x>
        <y>12</y>
-       <width>38</width>
+       <width>52</width>
        <height>761</height>
       </rect>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QSlider" name="cot_lo_high">
-      <property name="minimum">
-       <number>-180</number>
-      </property>
-      <property name="maximum">
-       <number>180</number>
-      </property>
-      <property name="singleStep">
-       <number>1</number>
-      </property>
-      <property name="value">
-       <number>180</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
-     <widget class="QSlider" name="cot_lo_low">
-      <property name="minimum">
-       <number>-180</number>
-      </property>
-      <property name="maximum">
-       <number>180</number>
-      </property>
-      <property name="value">
-       <number>-180</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QSlider" name="cot_lo_high">
+        <property name="minimum">
+         <number>-180</number>
+        </property>
+        <property name="maximum">
+         <number>180</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>180</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="cot_lo_low">
+        <property name="minimum">
+         <number>-180</number>
+        </property>
+        <property name="maximum">
+         <number>180</number>
+        </property>
+        <property name="value">
+         <number>-180</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
@@ -506,10 +522,10 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -529,9 +545,9 @@ font: 10pt &quot;Arial&quot;;</string>
        <hour>0</hour>
        <minute>0</minute>
        <second>0</second>
-       <year>2010</year>
-       <month>1</month>
-       <day>1</day>
+       <year>2009</year>
+       <month>2</month>
+       <day>4</day>
       </datetime>
      </property>
     </widget>
@@ -579,16 +595,16 @@ font: 10pt &quot;Arial&quot;;</string>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="value">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="sliderPosition">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -636,8 +652,8 @@ font: 10pt &quot;Arial&quot;;</string>
        <minute>0</minute>
        <second>0</second>
        <year>2010</year>
-       <month>12</month>
-       <day>31</day>
+       <month>10</month>
+       <day>23</day>
       </datetime>
      </property>
     </widget>
@@ -649,27 +665,27 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QChartView" name="DAU_1" native="true">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>30</y>
-       <width>320</width>
-       <height>320</height>
+       <x>360</x>
+       <y>10</y>
+       <width>450</width>
+       <height>400</height>
       </rect>
      </property>
     </widget>
     <widget class="QChartView" name="DAU_2" native="true">
      <property name="geometry">
       <rect>
-       <x>900</x>
-       <y>30</y>
-       <width>320</width>
-       <height>320</height>
+       <x>800</x>
+       <y>10</y>
+       <width>450</width>
+       <height>400</height>
       </rect>
      </property>
     </widget>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>55</x>
        <y>150</y>
        <width>251</width>
        <height>61</height>
@@ -708,7 +724,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>45</x>
        <y>360</y>
        <width>131</width>
        <height>31</height>
@@ -725,7 +741,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>45</x>
        <y>240</y>
        <width>131</width>
        <height>31</height>
@@ -742,7 +758,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QDateTimeEdit" name="dateTimeEdit_4">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>115</x>
        <y>396</y>
        <width>211</width>
        <height>31</height>
@@ -754,15 +770,15 @@ font: 10pt &quot;Arial&quot;;</string>
        <minute>0</minute>
        <second>0</second>
        <year>2010</year>
-       <month>12</month>
-       <day>31</day>
+       <month>10</month>
+       <day>23</day>
       </datetime>
      </property>
     </widget>
     <widget class="QDateTimeEdit" name="dateTimeEdit_3">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>115</x>
        <y>276</y>
        <width>211</width>
        <height>31</height>
@@ -773,26 +789,26 @@ font: 10pt &quot;Arial&quot;;</string>
        <hour>0</hour>
        <minute>0</minute>
        <second>0</second>
-       <year>2010</year>
-       <month>1</month>
-       <day>1</day>
+       <year>2009</year>
+       <month>2</month>
+       <day>4</day>
       </datetime>
      </property>
     </widget>
     <widget class="QSlider" name="dau_time_low">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>115</x>
        <y>320</y>
        <width>211</width>
        <height>16</height>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -801,20 +817,20 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QSlider" name="dau_time_high">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>115</x>
        <y>440</y>
        <width>211</width>
        <height>16</height>
       </rect>
      </property>
      <property name="maximum">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="singleStep">
-      <number>10</number>
+      <number>1</number>
      </property>
      <property name="value">
-      <number>365</number>
+      <number>626</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -823,7 +839,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>55</x>
        <y>80</y>
        <width>251</width>
        <height>61</height>
@@ -862,17 +878,17 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QChartView" name="DAU_3" native="true">
      <property name="geometry">
       <rect>
-       <x>530</x>
-       <y>370</y>
-       <width>711</width>
-       <height>441</height>
+       <x>360</x>
+       <y>400</y>
+       <width>880</width>
+       <height>450</height>
       </rect>
      </property>
     </widget>
     <widget class="QPushButton" name="step_plus">
      <property name="geometry">
       <rect>
-       <x>220</x>
+       <x>195</x>
        <y>660</y>
        <width>112</width>
        <height>34</height>
@@ -885,7 +901,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_14">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>45</x>
        <y>490</y>
        <width>101</width>
        <height>21</height>
@@ -902,7 +918,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QComboBox" name="Timestep">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>115</x>
        <y>530</y>
        <width>201</width>
        <height>31</height>
@@ -912,7 +928,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QPushButton" name="step_minus">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>55</x>
        <y>660</y>
        <width>112</width>
        <height>34</height>
@@ -925,7 +941,7 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLabel" name="label_15">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>45</x>
        <y>610</y>
        <width>71</width>
        <height>31</height>
@@ -942,53 +958,44 @@ font: 10pt &quot;Arial&quot;;</string>
     <widget class="QLineEdit" name="stepEdit">
      <property name="geometry">
       <rect>
-       <x>133</x>
+       <x>108</x>
        <y>616</y>
        <width>81</width>
        <height>25</height>
       </rect>
      </property>
     </widget>
+    <widget class="QLabel" name="warning_text">
+     <property name="geometry">
+      <rect>
+       <x>55</x>
+       <y>720</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;Times New Roman&quot;;
+font: 10pt &quot;Arial&quot;;</string>
+     </property>
+     <property name="text">
+      <string>Sorry, no data contains~</string>
+     </property>
+    </widget>
    </widget>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QPushButton" name="confirm">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>880</y>
-     <width>351</width>
-     <height>41</height>
+     <x>70</x>
+     <y>900</y>
+     <width>112</width>
+     <height>34</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <widget class="QPushButton" name="confirm">
-      <property name="text">
-       <string>Initialize</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <spacer name="horizontalSpacer_3">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
-     <widget class="QPushButton" name="back">
-      <property name="text">
-       <string>Back to Setting</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string>Initialize</string>
+   </property>
   </widget>
  </widget>
  <customwidgets>

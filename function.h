@@ -54,7 +54,6 @@ public:
     explicit Function(QWidget *parent);
     ~Function();
 
-
     void Top10POIs();
     void ComprasionOfTop();
     void NumberOfCheckin();
@@ -89,16 +88,21 @@ private slots:
 
     void on_stepEdit_textChanged(const QString &arg1);
 
+
 private:
     QVector<Datas> DataSet;
+    QScatterSeries *scatterSeries[1000];
+    int max_size;
 
-    QChart* chart;
-    QValueAxis* mAxY;
-    QValueAxis* mAxX;
-    QLineSeries* mLineSeries;
-
-    Time* t_start;
-    Time* t_end;
+    QChart* cotchart;
+    Time* t_start_top;
+    Time* t_end_top;
+    Time* t_start_cot;
+    Time* t_end_cot;
+    Time* t_start_ckin;
+    Time* t_end_ckin;
+    Time* t_start_dau;
+    Time* t_end_dau;
     int timestep;
     int step;
     int top_la_low;

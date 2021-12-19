@@ -17,6 +17,13 @@ Function::Function(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->confirm,SIGNAL(clicked()),this,SLOT(test()));
 
+    cotchart  = new QChart;
+    for (int i=0; i<1000; i++){
+        scatterSeries[i] = new QScatterSeries;
+        //cotchart->addSeries(scatterSeries[i]);
+        connect(scatterSeries[i],&QScatterSeries::hovered, this,&Function::PointHoverd);
+    }
+
     DAU_loid1 = 0;
     DAU_loid2 = 0;
     top_la_low = -90;
@@ -27,33 +34,34 @@ Function::Function(QWidget *parent) :
     cot_user[0] = cot_user[1] = -1;
     top_single = false;
     step = 1;
-    timestep = 365;
+    timestep = 626;
 
 //Top10 connect
     //time slider
     connect(ui->top_start_time,&QSlider::valueChanged,[=](int d){
         if (d > ui->top_end_time->value()){
             d = ui->top_end_time->value();
+            ui->top_start_time->setSliderPosition(d);
         }
-        ui->top_start_edit->setDate(t_start->day.addDays(d));
+        ui->top_start_edit->setDate(t_start_top->day.addDays(d));
     });
     connect(ui->top_end_time,&QSlider::valueChanged,[=](int d){
         if (d < ui->top_start_time->value()){
             d = ui->top_start_time->value();
         }
-        ui->top_end_edit->setDate(t_start->day.addDays(d));
+        ui->top_end_edit->setDate(t_start_top->day.addDays(d));
     });
     connect(ui->top_start_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day > ui->top_end_edit->date()){
             day = ui->top_end_edit->date();
         }
-        ui->top_start_time->setValue(t_start->day.daysTo(day));
+        ui->top_start_time->setValue(t_start_top->day.daysTo(day));
     });
     connect(ui->top_end_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day < ui->top_start_edit->date()){
             day = ui->top_start_edit->date();
         }
-        ui->top_end_time->setValue(t_start->day.daysTo(day));
+        ui->top_end_time->setValue(t_start_top->day.daysTo(day));
     });
 
 
@@ -91,25 +99,25 @@ Function::Function(QWidget *parent) :
         if (d > ui->cot_end_time->value()){
             d = ui->cot_end_time->value();
         }
-        ui->cot_start_edit->setDate(t_start->day.addDays(d));
+        ui->cot_start_edit->setDate(t_start_cot->day.addDays(d));
     });
     connect(ui->cot_end_time,&QSlider::valueChanged,[=](int d){
         if (d < ui->cot_start_time->value()){
             d = ui->cot_start_time->value();
         }
-        ui->cot_end_edit->setDate(t_start->day.addDays(d));
+        ui->cot_end_edit->setDate(t_start_cot->day.addDays(d));
     });
     connect(ui->cot_start_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day > ui->cot_end_edit->date()){
             day = ui->cot_end_edit->date();
         }
-        ui->cot_start_time->setValue(t_start->day.daysTo(day));
+        ui->cot_start_time->setValue(t_start_cot->day.daysTo(day));
     });
     connect(ui->cot_end_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day < ui->cot_start_edit->date()){
             day = ui->cot_start_edit->date();
         }
-        ui->cot_end_time->setValue(t_start->day.daysTo(day));
+        ui->cot_end_time->setValue(t_start_cot->day.daysTo(day));
     });
 
 
@@ -118,25 +126,53 @@ Function::Function(QWidget *parent) :
         if (d > ui->ckin_end_time_slider->value()){
             d = ui->ckin_end_time_slider->value();
         }
-        ui->dateTimeEdit->setDate(t_start->day.addDays(d));
+        ui->dateTimeEdit->setDate(t_start_ckin->day.addDays(d));
     });
     connect(ui->ckin_end_time_slider,&QSlider::valueChanged,[=](int d){
         if (d < ui->ckin_start_time_slider->value()){
             d = ui->ckin_start_time_slider->value();
         }
-        ui->dateTimeEdit_2->setDate(t_start->day.addDays(d));
+        ui->dateTimeEdit_2->setDate(t_start_ckin->day.addDays(d));
     });
     connect(ui->dateTimeEdit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day > ui->dateTimeEdit_2->date()){
             day = ui->dateTimeEdit_2->date();
         }
-        ui->ckin_start_time_slider->setValue(t_start->day.daysTo(day));
+        ui->ckin_start_time_slider->setValue(t_start_ckin->day.daysTo(day));
     });
     connect(ui->dateTimeEdit_2,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day < ui->dateTimeEdit->date()){
             day = ui->dateTimeEdit->date();
         }
-        ui->ckin_end_time_slider->setValue(t_start->day.daysTo(day));
+        ui->ckin_end_time_slider->setValue(t_start_ckin->day.daysTo(day));
+    });
+
+
+// DAU connect
+    //time
+    connect(ui->dau_time_low,&QSlider::valueChanged,[=](int d){
+        if (d > ui->dau_time_high->value()){
+            d = ui->dau_time_high->value();
+        }
+        ui->dateTimeEdit_3->setDate(t_start_dau->day.addDays(d));
+    });
+    connect(ui->dau_time_high,&QSlider::valueChanged,[=](int d){
+        if (d < ui->dau_time_low->value()){
+            d = ui->dau_time_low->value();
+        }
+        ui->dateTimeEdit_4->setDate(t_start_dau->day.addDays(d));
+    });
+    connect(ui->dateTimeEdit_3,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day > ui->dateTimeEdit_4->date()){
+            day = ui->dateTimeEdit_4->date();
+        }
+        ui->dau_time_low->setValue(t_start_dau->day.daysTo(day));
+    });
+    connect(ui->dateTimeEdit_4,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day < ui->dateTimeEdit_3->date()){
+            day = ui->dateTimeEdit_3->date();
+        }
+        ui->dau_time_high->setValue(t_start_dau->day.daysTo(day));
     });
 }
 
@@ -157,10 +193,14 @@ void Function::rec_finished(int a){
 }
 
 void Function::start(){
-    bool fu[60000];
-    bool fo[60000];
-    for (int i=0; i<60000; i++) {
-        fu[i] = fo[i] = false;
+    max_size = DataSet.size();
+    bool fu[55000];
+    bool fo[25000];
+    for (int i=0; i<55000; i++) {
+        if (i < 25000){
+            fo[i] = false;
+        }
+        fu[i] = false;
     }
 
     ui->cot_user_Box1->addItem("All");
@@ -191,9 +231,9 @@ void Function::start(){
 }
 
 void Function::test(){
-    //Top10POIs();
-    //ComprasionOfTop();
-    //NumberOfCheckin();
+    Top10POIs();
+    ComprasionOfTop();
+    NumberOfCheckin();
     DAU();
 }
 
@@ -258,7 +298,6 @@ void Function::PointHoverd(const QPointF &point, bool state){
     else{
         ui->valuelabel->hide();
     }
-
 }
 
 void Function::Top10POIs(){
@@ -266,15 +305,15 @@ void Function::Top10POIs(){
         delete ui->chartTop->layout();
     }
 
-    QVector<lct_cnt> * u[10000];
-    QVector<lct_cnt> * u1[10000];
+    QVector<lct_cnt> u[55000];
+    QVector<lct_cnt> u1[55000];
     QStringList* xTitle = new QStringList;
     QChart* chart = new QChart();
     QBarSeries* barTop = new QBarSeries;
     QBarSet *tmp_bar[10];
     chart->addSeries(barTop);
-    t_start = new Time(ui->top_start_edit->date(),ui->top_start_edit->time());
-    t_end = new Time(ui->top_end_edit->date(),ui->top_end_edit->time());
+    t_start_top = new Time(ui->top_start_edit->date(),ui->top_start_edit->time());
+    t_end_top = new Time(ui->top_end_edit->date(),ui->top_end_edit->time());
 
     int max_y = 50;
     int cnt = 0;
@@ -287,11 +326,11 @@ void Function::Top10POIs(){
 
     for (int i=0; i<DataSet.size(); i++){
         int tmpid = DataSet.at(i).User_Id;
-        if (DataSet.at(i).t.day <= t_end->day && DataSet.at(i).t.day >= t_start->day && ((top_single && tmpid == id) || (!top_single))){
+        if (DataSet.at(i).t.day <= t_end_top->day && DataSet.at(i).t.day >= t_start_top->day && ((top_single && tmpid == id) || (!top_single))){
             ans++;
             if (tmpid == id && ans != 1){
                 lct_cnt tmp(DataSet.at(i).Location_Id,DataSet.at(i).latitude,DataSet.at(i).longitude);
-                u[cnt]->append(tmp);
+                u[cnt].append(tmp);
             }
             else {
                 if (ans != 1) {
@@ -302,14 +341,16 @@ void Function::Top10POIs(){
                     }
                     if (!top_single) id = tmpid;
                 }
-                u[cnt] = new QVector<lct_cnt>;
-                u1[cnt] = new QVector<lct_cnt>;
+                //u[cnt] = new QVector<lct_cnt>;
+                //u1[cnt] = new QVector<lct_cnt>;
                 //qDebug() << tmpid << DataSet.at(i).Location_Id;
+                u[cnt].clear();
+                u1[cnt].clear();
                 tmp_bar[cnt] = new QBarSet("User" + QString::number(tmpid));
                 barTop->append(tmp_bar[cnt]);
                 if (ans == 1){
                     lct_cnt tmp(DataSet.at(i).Location_Id,DataSet.at(i).latitude,DataSet.at(i).longitude);
-                    u[cnt]->append(tmp);
+                    u[cnt].append(tmp);
                 }
             }
         }
@@ -321,24 +362,24 @@ void Function::Top10POIs(){
     }
 
     for (int i=0; i<=cnt; i++){
-        for (int j=0; j<u[i]->size(); j++){
-            int t = std::count(u1[i]->begin(),u1[i]->end(),u[i]->at(j));
+        for (int j=0; j<u[i].size(); j++){
+            int t = std::count(u1[i].begin(),u1[i].end(),u[i].at(j));
             if (t > 0)
                 continue;
 
             else {
-                int nt = std::count(u[i]->begin(),u[i]->end(),u[i]->at(j));
-                lct_cnt tmp(u[i]->at(j).l_id,nt,u[i]->at(j).la,u[i]->at(j).lo);
-                u1[i]->append(tmp);
+                int nt = std::count(u[i].begin(),u[i].end(),u[i].at(j));
+                lct_cnt tmp(u[i].at(j).l_id,nt,u[i].at(j).la,u[i].at(j).lo);
+                u1[i].append(tmp);
             }
         }
-        std::sort(u1[i]->begin(),u1[i]->end());
-        max_y = std::max(max_y,u1[i]->at(0).l_cnt);
+        std::sort(u1[i].begin(),u1[i].end());
+        max_y = std::max(max_y,u1[i].at(0).l_cnt);
 
-        for (int k=0; k<(std::min(100,u1[i]->size())); k++){
-            int s = u1[i]->at(k).l_cnt;
+        for (int k=0; k<(std::min(100,u1[i].size())); k++){
+            int s = u1[i].at(k).l_cnt;
             tmp_bar[i]->append(s);
-            xTitle->append(QString::number(u1[i]->at(k).l_id));
+            xTitle->append(QString::number(u1[i].at(k).l_id));
         }
 
     }
@@ -372,19 +413,29 @@ void Function::Top10POIs(){
     QGridLayout *baseLayout = new QGridLayout();
     baseLayout->addWidget(view, 1, 0);
     ui->chartTop->setLayout(baseLayout);
+
 }
 
 void Function::ComprasionOfTop(){
+    for (int i=0; i<1000; i++){
+        scatterSeries[i]->clear();
+    }
+    int tmp_size = cotchart->series().size();
+    for (int i=0; i<tmp_size; i++){
+        cotchart->removeSeries(cotchart->series().at(0));
+    }
     if (ui->charts->layout()){
         delete ui->charts->layout();
     }
-    QVector<lct_cnt> * u[9000];
-    QVector<lct_cnt> * u1[9000];
-    QColor c[9000];
-    QChart *chart = new QChart();
-    QScatterSeries *scatterSeries[10000];
-    t_start = new Time(ui->cot_start_edit->date(),ui->cot_start_edit->time());
-    t_end = new Time(ui->cot_end_edit->date(),ui->cot_end_edit->time());
+
+    QVector<lct_cnt> u[55000];
+    QVector<lct_cnt> u1[55000];
+    QColor c[1000];
+
+    //QChart *chart = new QChart();
+
+    t_start_cot = new Time(ui->cot_start_edit->date(),ui->cot_start_edit->time());
+    t_end_cot = new Time(ui->cot_end_edit->date(),ui->cot_end_edit->time());
 
     float max_la = -90;
     float min_la = 90;
@@ -402,30 +453,31 @@ void Function::ComprasionOfTop(){
     //qDebug() << cot_user_flag << cot_user[0] << cot_user[1] ;
     for (int i=0; i<DataSet.size(); i++){
         int tmpid = DataSet.at(i).User_Id;
-        if (DataSet.at(i).t.day <= t_end->day && DataSet.at(i).t.day >= t_start->day &&
+        if (DataSet.at(i).t.day <= t_end_cot->day && DataSet.at(i).t.day >= t_start_cot->day &&
                 ((cot_user_flag == 3) || (cot_user_flag == 2 && (tmpid == cot_user[0] || tmpid == cot_user[1])) ||
-                 (cot_user_flag == 0 && tmpid == cot_user[0])) && ans < 5000){
+                 (cot_user_flag == 0 && tmpid == cot_user[0])) && ans < 10000){
             ans++;
             if (tmpid == id && ans != 1){
                 lct_cnt tmp(DataSet.at(i).Location_Id,DataSet.at(i).latitude,DataSet.at(i).longitude);
-                u[cnt]->append(tmp);
+                u[cnt].append(tmp);
             }
             else {
                 if (ans != 1) {
                     cnt++;
                     id = tmpid;
                 }
-                u[cnt] = new QVector<lct_cnt>;
-                u1[cnt] = new QVector<lct_cnt>;
+                //u[cnt] = new QVector<lct_cnt>;
+                //u1[cnt] = new QVector<lct_cnt>;
+                u[cnt].clear();
+                u1[cnt].clear();
                 if (ans == 1){
                     lct_cnt tmp(DataSet.at(i).Location_Id,DataSet.at(i).latitude,DataSet.at(i).longitude);
-                    u[cnt]->append(tmp);
+                    u[cnt].append(tmp);
                 }
 
                 for (int j=0; j<10; j++){
-                    scatterSeries[cnt*10 + j] = new QScatterSeries(chart);
-                    chart->addSeries(scatterSeries[cnt*10 +j]);
-                    connect(scatterSeries[cnt*10 + j],&QScatterSeries::hovered, this,&Function::PointHoverd);
+                    cotchart->addSeries(scatterSeries[cnt*10 +j]);
+                    //connect(scatterSeries[cnt*10 + j],&QScatterSeries::hovered, this,&Function::PointHoverd);
                 }
 
                 QString name = "User " + QString::number(id,10);
@@ -439,89 +491,96 @@ void Function::ComprasionOfTop(){
         return;
     }
 
-    for (int i=0; i<=cnt; i++){
-        for (int j=0; j<u[i]->size(); j++){
-            int t = std::count(u1[i]->begin(),u1[i]->end(),u[i]->at(j));
-            if (t > 0)
-                continue;
+    else {
+        for (int i=0; i<=cnt; i++){
+            for (int j=0; j<u[i].size(); j++){
+                int t = std::count(u1[i].begin(),u1[i].end(),u[i].at(j));
+                if (t > 0)
+                    continue;
 
-            else {
-                int nt = std::count(u[i]->begin(),u[i]->end(),u[i]->at(j));
-                lct_cnt tmp(u[i]->at(j).l_id,nt,u[i]->at(j).la,u[i]->at(j).lo);
-                u1[i]->append(tmp);
+                else {
+                    int nt = std::count(u[i].begin(),u[i].end(),u[i].at(j));
+                    lct_cnt tmp(u[i].at(j).l_id,nt,u[i].at(j).la,u[i].at(j).lo);
+                    u1[i].append(tmp);
+                }
+            }
+            std::sort(u1[i].begin(),u1[i].end());
+
+            //set color
+            switch (i){
+            case 0: c[i].setRgb(211, 47, 47); break;
+            case 1: c[i].setRgb(123, 31, 162); break;
+            case 2: c[i].setRgb(25, 118, 210); break;
+            case 3: c[i].setRgb(0, 131, 143); break;
+            case 4: c[i].setRgb(85, 139, 47); break;
+            case 5: c[i].setRgb(158, 157, 36); break;
+            case 6: c[i].setRgb(249, 168, 37); break;
+            case 7: c[i].setRgb(255, 111, 0); break;
+            case 8: c[i].setRgb(255, 112, 67); break;
+            default: c[i].setRgb((c[i%9].red()+10)%255,(c[i%9].blue()+20)%255,(c[i%9].green()+30)%255); break;
+            }
+
+            if (u1[i].size() == 0){
+                scatterSeries[i*10]->clear();
+                continue;
+            }
+
+            for (int k=0; k<(std::min(10,u1[i].size())); k++){
+                int s = u1[i].at(k).l_cnt;
+                scatterSeries[i*10 + k]->append(u1[i].at(k).la,u1[i].at(k).lo);
+                scatterSeries[i*10 + k]->setMarkerSize(s*5); // 设置节点大小
+                c[i].setAlphaF(0.5);
+                scatterSeries[i*10 + k]->setColor(c[i]);
+                max_la = std::max(max_la,u1[i].at(k).la);
+                min_la = std::min(min_la,u1[i].at(k).la);
+                max_lo = std::max(max_lo,u1[i].at(k).lo);
+                min_lo = std::min(min_lo,u1[i].at(k).lo);
             }
         }
-        std::sort(u1[i]->begin(),u1[i]->end());
 
-        //set color
-        switch (i){
-        case 0: c[i].setRgb(211, 47, 47); break;
-        case 1: c[i].setRgb(123, 31, 162); break;
-        case 2: c[i].setRgb(25, 118, 210); break;
-        case 3: c[i].setRgb(0, 131, 143); break;
-        case 4: c[i].setRgb(85, 139, 47); break;
-        case 5: c[i].setRgb(158, 157, 36); break;
-        case 6: c[i].setRgb(249, 168, 37); break;
-        case 7: c[i].setRgb(255, 111, 0); break;
-        case 8: c[i].setRgb(255, 112, 67); break;
-        default: c[i].setRgb((c[i%9].red()+10)%255,(c[i%9].blue()+20)%255,(c[i%9].green()+30)%255); break;
+        //view
+        cotchart->setAnimationOptions(QChart::GridAxisAnimations);
+        cotchart->createDefaultAxes();
+        cotchart->axes(Qt::Horizontal).first()->setRange(min_la-10, max_la+10);// x轴范围
+        cotchart->axes(Qt::Vertical).first()->setRange(min_lo-20, max_lo+20);// y轴范围
+        cotchart->axes(Qt::Horizontal).first()->setTitleText("Latitude");
+        cotchart->axes(Qt::Vertical).first()->setTitleText("Longitude");
+
+        // some settings
+        QValueAxis *axisY = qobject_cast<QValueAxis*>(cotchart->axes(Qt::Vertical).first());
+        Q_ASSERT(axisY);
+        axisY->setLabelFormat("%.1f  ");
+
+        const auto markers = cotchart->legend()->markers();
+        for (QLegendMarker *marker : markers) {
+            QObject::disconnect(marker, &QLegendMarker::clicked, this ,&Function::handleMarkerClicked);
+            QObject::connect(marker, &QLegendMarker::clicked, this, &Function::handleMarkerClicked);
         }
 
-        for (int k=0; k<(std::min(10,u1[i]->size())); k++){
-            int s = u1[i]->at(k).l_cnt;
-            scatterSeries[i*10 + k]->append(u1[i]->at(k).la,u1[i]->at(k).lo);
-            scatterSeries[i*10 + k]->setMarkerSize(s*5); // 设置节点大小
-            c[i].setAlphaF(0.5);
-            scatterSeries[i*10 + k]->setColor(c[i]);
-            max_la = std::max(max_la,u1[i]->at(k).la);
-            min_la = std::min(min_la,u1[i]->at(k).la);
-            max_lo = std::max(max_lo,u1[i]->at(k).lo);
-            min_lo = std::min(min_lo,u1[i]->at(k).lo);
+        cotchart->legend()->setVisible(true);
+        if (cot_user_flag == 3){
+            cotchart->legend()->setVisible(false);
         }
+
+        //show
+        QChartView *view = new QChartView(cotchart);
+        view->setRenderHint(QPainter::Antialiasing);
+        view->QChartView::setRubberBand(QChartView::RectangleRubberBand);
+        QGridLayout *baseLayout = new QGridLayout();
+        baseLayout->addWidget(view, 1, 0);
+        ui->charts->setLayout(baseLayout);
     }
-
-    //view
-    chart->setAnimationOptions(QChart::AllAnimations);
-    chart->createDefaultAxes();//设置网格线
-    chart->axes(Qt::Horizontal).first()->setRange(min_la-10, max_la+10);// x轴范围
-    chart->axes(Qt::Vertical).first()->setRange(min_lo-20, max_lo+20);// y轴范围
-    chart->axes(Qt::Horizontal).first()->setTitleText("Latitude");
-    chart->axes(Qt::Vertical).first()->setTitleText("Longitude");
-
-    // some settings
-    QValueAxis *axisY = qobject_cast<QValueAxis*>(chart->axes(Qt::Vertical).first());
-    Q_ASSERT(axisY);
-    axisY->setLabelFormat("%.1f  ");
-
-    const auto markers = chart->legend()->markers();
-    for (QLegendMarker *marker : markers) {
-        QObject::disconnect(marker, &QLegendMarker::clicked, this ,&Function::handleMarkerClicked);
-        QObject::connect(marker, &QLegendMarker::clicked, this, &Function::handleMarkerClicked);
-    }
-
-    if (cot_user_flag == 3){
-        chart->legend()->setVisible(false);
-    }
-
-    //show
-    QChartView *view = new QChartView(chart);
-    view->setRenderHint(QPainter::Antialiasing);
-    view->QChartView::setRubberBand(QChartView::RectangleRubberBand);
-    QGridLayout *baseLayout = new QGridLayout();
-    baseLayout->addWidget(view, 1, 0);
-    ui->charts->setLayout(baseLayout);
 }
-
 
 void Function::NumberOfCheckin(){
     if (ui->ckinchart->layout()){
         delete ui->ckinchart->layout();
     }
-    t_start = new Time(ui->dateTimeEdit->date(),ui->dateTimeEdit->time());
-    t_end = new Time(ui->dateTimeEdit_2->date(),ui->dateTimeEdit_2->time());
+    t_start_ckin = new Time(ui->dateTimeEdit->date(),ui->dateTimeEdit->time());
+    t_end_ckin = new Time(ui->dateTimeEdit_2->date(),ui->dateTimeEdit_2->time());
     QDate t_min, t_max;
-    t_min.setDate(2010,1,1);
-    t_max.setDate(2010,12,31);
+    t_min.setDate(2009,2,4);
+    t_max.setDate(2010,10,23);
     int cnt[700];
 
     for (int i=0; i<700; i++) {
@@ -529,8 +588,8 @@ void Function::NumberOfCheckin(){
     }
 
     for (int i=0; i<DataSet.size(); i++){
-        if (DataSet.at(i).t.day <= t_end->day && DataSet.at(i).t.day >= t_start->day && DataSet.at(i).Location_Id == ckin_loid){
-            int tmp = t_start->day.daysTo(DataSet.at(i).t.day);
+        if (DataSet.at(i).Location_Id == ckin_loid && DataSet.at(i).t.day <= t_end_ckin->day && DataSet.at(i).t.day >= t_start_ckin->day){
+            int tmp = t_start_ckin->day.daysTo(DataSet.at(i).t.day);
             cnt[tmp]++;
         }
     }
@@ -542,9 +601,9 @@ void Function::NumberOfCheckin(){
 
 
     //add point
-    for(int i = 0 ;i < t_start->day.daysTo(t_end->day);i++){
+    for(int i = 0 ;i < t_start_ckin->day.daysTo(t_end_ckin->day);i++){
         QDateTime t;
-        t.setDate(t_start->day.addDays(i));
+        t.setDate(t_start_ckin->day.addDays(i));
         t.setTime(QTime(0,0,0));
         line1->append(t.toMSecsSinceEpoch(), cnt[i]);
     }
@@ -589,24 +648,20 @@ void Function::DAU(){
     }
 
 
-    QVector<int>* lo_u[10000];
-    t_start = new Time(ui->dateTimeEdit_3->date(),ui->dateTimeEdit_3->time());
-    t_end = new Time(ui->dateTimeEdit_4->date(),ui->dateTimeEdit_4->time());
+    QVector<int> lo_u[55000];
+    t_start_dau = new Time(ui->dateTimeEdit_3->date(),ui->dateTimeEdit_3->time());
+    t_end_dau = new Time(ui->dateTimeEdit_4->date(),ui->dateTimeEdit_4->time());
 
-    int index_lo[10000];
-    int lo_index[10000];
-    int cnt1[5000];
-    int cnt2[5000];
-    int crt_index = -1;
+    int cnt1[55000];
+    int cnt2[55000];
     int ans1 = 0;
     int ans2 = 0;
-    int user1[5000];
-    int user2[5000];
+    int user1[25000];
+    int user2[25000];
     int cntline1[700];
     int cntline2[700];
-    bool flag[5000];
-    bool visited1[5000];
-    bool visited2[5000];
+    bool visited1[55000];
+    bool visited2[55000];
     bool number_contain = false;
 
     for (int i=0; i<700; i++) {
@@ -614,45 +669,31 @@ void Function::DAU(){
         cntline2[i] = 0;
     }
 
-    for (int i=0; i<10000; i++){
-        if (i<5000){
-            visited1[i] = false;
-            visited2[i] = false;
+    for (int i=0; i<55000; i++){
+        if (i<25000){
             user1[i] = 0;
             user2[i] = 0;
         }
-        flag[i] = false;
         cnt1[i] = 0;
         cnt2[i] = 0;
+        visited1[i] = false;
+        visited2[i] = false;
+        lo_u[i].clear();
     }
 
     for (int i=0; i<DataSet.size(); i++){
         Datas tmp = DataSet.at(i);
-        if (tmp.t.day <= t_start->day.addDays(timestep*step) && tmp.t.day >= t_start->day.addDays(timestep*(step-1))){
-            //qDebug() << t_start->day.addDays(timestep*step) << t_start->day.addDays(timestep*(step-1)) << tmp.t.day;
+        if (tmp.t.day <= t_start_dau->day.addDays(timestep*step) && tmp.t.day >= t_start_dau->day.addDays(timestep*(step-1))){
             number_contain = true;
-            if (flag[tmp.Location_Id] == false){
-                flag[tmp.Location_Id] = true;
-
-                index_lo[++crt_index] = tmp.Location_Id;
-                lo_index[tmp.Location_Id] = crt_index;
-
-                lo_u[lo_index[tmp.Location_Id]] = new QVector<int>;
-                lo_u[lo_index[tmp.Location_Id]]->append(tmp.User_Id);
-            }
-            else {
-                lo_u[lo_index[tmp.Location_Id]]->append(tmp.User_Id);
-            }
-            int tmp_d = t_start->day.daysTo(DataSet.at(i).t.day);
+            lo_u[tmp.Location_Id].append(tmp.User_Id);
+            int tmp_d = t_start_dau->day.daysTo(DataSet.at(i).t.day);
             if (tmp.Location_Id == DAU_loid1) cntline1[tmp_d]++;
             if (tmp.Location_Id == DAU_loid2) cntline2[tmp_d]++;
         }
-
-
-        //qDebug() << cntline1[tmp_d] <<cntline2[tmp_d];
     }
 
     if (number_contain){
+        ui->warning_text->hide();
         QChart *chart1 = new QChart();
         QChart *chart2 = new QChart();
         QChart *chart3 = new QChart();
@@ -665,34 +706,34 @@ void Function::DAU(){
         //qDebug() << DAU_loid1 << ' ' << DAU_loid2;
 
         //set location1
-        for (int i=0; i<lo_u[lo_index[DAU_loid1]]->size(); i++){
-            if (!visited1[lo_u[lo_index[DAU_loid1]]->at(i)]){
-                visited1[lo_u[lo_index[DAU_loid1]]->at(i)] = true;
-                user1[ans1++] = lo_u[lo_index[DAU_loid1]]->at(i);
+        for (int i=0; i<lo_u[DAU_loid1].size(); i++){
+            if (!visited1[lo_u[DAU_loid1].at(i)]){
+                visited1[lo_u[DAU_loid1].at(i)] = true;
+                user1[ans1++] = lo_u[DAU_loid1].at(i);
             }
-            cnt1[lo_u[lo_index[DAU_loid1]]->at(i)]++;
+            cnt1[lo_u[DAU_loid1].at(i)]++;
         }
 
         for (int i=0; i<ans1; i++){
-            if (cnt1[user1[i]] > (ans1/80)){
-                QString name = "User " + QString::number(user1[i]);
+            if (cnt1[user1[i]] > (ans1/30)){
+                QString name = QString::number(user1[i]);
                 series1->append(name,cnt1[user1[i]]);
             }
 
         }
 
         //set location2
-        for (int i=0; i<lo_u[lo_index[DAU_loid2]]->size(); i++){
-            if (!visited2[lo_u[lo_index[DAU_loid2]]->at(i)]){
-                visited2[lo_u[lo_index[DAU_loid2]]->at(i)] = true;
-                user2[ans2++] = lo_u[lo_index[DAU_loid2]]->at(i);
+        for (int i=0; i<lo_u[DAU_loid2].size(); i++){
+            if (!visited2[lo_u[DAU_loid2].at(i)]){
+                visited2[lo_u[DAU_loid2].at(i)] = true;
+                user2[ans2++] = lo_u[DAU_loid2].at(i);
             }
-            cnt2[lo_u[lo_index[DAU_loid2]]->at(i)]++;
+            cnt2[lo_u[DAU_loid2].at(i)]++;
         }
 
         for (int i=0; i<ans2; i++){
-            if (cnt2[user2[i]] > (ans2/80)){
-                QString name = "User " + QString::number(user2[i]);
+            if (cnt2[user2[i]] > (ans2/30)){
+                QString name = QString::number(user2[i]);
                 series2->append(name,cnt2[user2[i]]);
             }
         }
@@ -702,9 +743,9 @@ void Function::DAU(){
         QValueAxis* y = new QValueAxis;
 
         //add point
-        for(int i = 0 ;i < t_start->day.daysTo(t_end->day);i++){
+        for(int i = 0 ;i < t_start_dau->day.daysTo(t_end_dau->day);i++){
             QDateTime t;
-            t.setDate(t_start->day.addDays(i));
+            t.setDate(t_start_dau->day.addDays(i));
             t.setTime(QTime(0,0,0));
             line1->append(t.toMSecsSinceEpoch(), cntline1[i]);
             line2->append(t.toMSecsSinceEpoch(), cntline2[i]);
@@ -734,6 +775,10 @@ void Function::DAU(){
         //饼图中间空心的比例
         //series1->setHoleSize(0.25);
         //series2->setHoleSize(0.25);
+        series1->setName("Location " + QString::number(DAU_loid1));
+        series2->setName("Location " + QString::number(DAU_loid2));
+        series1->setLabelsVisible(true);
+        series2->setLabelsVisible(true);
 
         //show
         QChartView *view1 = new QChartView(chart1);
@@ -752,7 +797,7 @@ void Function::DAU(){
         ui->DAU_3->setLayout(baseLayout3);
     }
     else {
-
+        ui->warning_text->show();
     }
 
 }
@@ -767,6 +812,7 @@ void Function::on_cot_user_Box1_currentIndexChanged(const QString &arg1)
         if (cot_user[1] == -1) cot_user_flag = 0;
         else if (cot_user[1] >= 0) cot_user_flag = 2;
     }
+    ComprasionOfTop();
 }
 
 void Function::on_cot_user_Box2_currentIndexChanged(const QString &arg1)
@@ -780,18 +826,19 @@ void Function::on_cot_user_Box2_currentIndexChanged(const QString &arg1)
         cot_user[1] = arg1.toInt();
         if (cot_user_flag != 3) cot_user_flag = 2;
     }
+    ComprasionOfTop();
 }
 
 void Function::on_dau_lo1_textEdited(const QString &arg1)
 {
     DAU_loid1 = arg1.toInt();
-    DAU();
+    //DAU();
 }
 
 void Function::on_dau_lo2_textEdited(const QString &arg1)
 {
     DAU_loid2 = arg1.toInt();
-    DAU();
+    //DAU();
 }
 
 void Function::on_top_user_Box_currentIndexChanged(const QString &arg1)
@@ -815,25 +862,27 @@ void Function::on_locationBox_currentIndexChanged(const QString &arg1)
 
 void Function::on_step_plus_clicked()
 {
-    step++;
-    if (step*timestep > 365) {
-        QMessageBox::warning(this, "Warning!", "No more than 365 days!");
+    if (step*timestep > 626) {
+        QMessageBox::warning(this, "Warning!", "No more than 626 days!");
         return;
     }
+    step++;
     ui->stepEdit->setText(QString::number(step));
+    DAU();
 }
 void Function::on_step_minus_clicked()
 {
-    step--;
-    if (step*timestep > 365) {
-        QMessageBox::warning(this, "Warning!", "No more than 365 days!");
+    if (step*timestep > 626) {
+        QMessageBox::warning(this, "Warning!", "No more than 626 days!");
         return;
     }
     if (step <= 0) {
         QMessageBox::warning(this, "Warning!", "step can't be negative");
         return;
     }
+    step--;
     ui->stepEdit->setText(QString::number(step));
+    DAU();
 }
 
 void Function::on_Timestep_currentIndexChanged(const QString &arg1)
@@ -841,11 +890,20 @@ void Function::on_Timestep_currentIndexChanged(const QString &arg1)
     if (arg1 == "Daily") timestep = 1;
     if (arg1 == "Ten Days") timestep = 10;
     if (arg1 == "One Month") timestep = 30;
-    if (arg1 == "One Year") timestep = 365;
-    timestep = 180;
+    step = 1;
+    ui->stepEdit->setText("1");
+
+    if (arg1 == "One Year"){
+        timestep = 365;
+        step = 0;
+        ui->stepEdit->setText("0");
+    }
 }
 
 void Function::on_stepEdit_textChanged(const QString &arg1)
 {
     step = arg1.toInt();
+    //DAU();
 }
+
+
