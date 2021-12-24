@@ -10,7 +10,7 @@
 #include "iostream"
 #include "QMessageBox"
 
-Openf::Openf(QWidget *parent, QVector<Datas>*& d)
+Openf::Openf(QWidget *parent, QVector<Datas> *&d)
     : QThread(parent)
     , ds(d)
 {

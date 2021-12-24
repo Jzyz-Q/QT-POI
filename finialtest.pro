@@ -1,9 +1,11 @@
-QT       += core gui
+QT       += core gui \
+    quick
 QT += charts
+QT += quickwidgets qml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = BaiduMap
+TARGET = POI
 TEMPLATE = app
 
 CONFIG += c++11
@@ -45,3 +47,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES +=
+
+RESOURCES += \
+    map.qrc

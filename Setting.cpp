@@ -11,7 +11,7 @@
 #include "iostream"
 #include "QList"
 
-Setting::Setting(QWidget *parent, QVector<Datas>*& d)
+Setting::Setting(QWidget *parent, QVector<Datas> *&d)
     : QThread(parent)
     , ds(d)
 {
@@ -24,7 +24,7 @@ Setting::Setting(QWidget *parent, QVector<Datas>*& d)
     Longitude = new QVector<float>;
     Times1 = new QVector<QDate>;
 
-    AfterSelect = new QVector<Datas>;
+    //AfterSelect = new QVector<Datas>;
 }
 
 Setting::~Setting(){
@@ -32,8 +32,9 @@ Setting::~Setting(){
 }
 
 void Setting::run(){
-    AfterSelect->clear();
+    AfterSelect.clear();
     for (int i=0; i<ds->size(); i++){
+
         Datas tmp = ds->at(i);
 
         if (((u_f && std::find(Users->begin(),Users->end(),tmp.User_Id) != Users->end()) || !u_f) &&
@@ -42,11 +43,12 @@ void Setting::run(){
             ((lo_f && tmp.longitude <= Longitude->at(1) && tmp.longitude >= Longitude->at(0)) || !lo_f) &&
             ((t_f && tmp.t.day <= Times1->at(1) && tmp.t.day >= Times1->at(0)) || !t_f))
         {
-            AfterSelect->append(tmp);
-            emit SendDataset(tmp);
+            AfterSelect.append(tmp);
+            //emit SendDataset(tmp);
         }
     }
-    qDebug()<< AfterSelect->size() <<endl;
+    qDebug()<< AfterSelect.size() <<endl;
+    emit SendData(AfterSelect);
     u_f = lct_f = t_f = lo_f = la_f = false;
     emit SendFinishedSignal(-1);
 }

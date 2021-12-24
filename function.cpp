@@ -5,6 +5,7 @@
 #include "QtCharts"
 #include "iostream"
 #include "cmath"
+#include <synchapi.h>
 
 struct lct_cnt;
 struct Time;
@@ -15,21 +16,45 @@ Function::Function(QWidget *parent) :
     qRegisterMetaType<QVector<Datas>>("QVector<Datas>");
     qRegisterMetaType<Time>("Time");
     ui->setupUi(this);
-    connect(ui->confirm,SIGNAL(clicked()),this,SLOT(test()));
+    ui->mapWidget->setFocus();
+    ui->mapWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    ui->mapWidget->setSource(QUrl("qrc:/map.qml"));
+    ui->heatmapWidget->setFocus();
+    ui->heatmapWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    ui->heatmapWidget->setSource(QUrl("qrc:/map.qml"));
+    item = new QObject;
+    item_heat = new QObject;
+    item = ui->mapWidget->rootObject();
+    item_heat = ui->heatmapWidget->rootObject();
 
+    xTitle = new QStringList;
     cotchart  = new QChart;
+    smlchart = new QChart;
     for (int i=0; i<1000; i++){
         scatterSeries[i] = new QScatterSeries;
         //cotchart->addSeries(scatterSeries[i]);
         connect(scatterSeries[i],&QScatterSeries::hovered, this,&Function::PointHoverd);
     }
+    for (int i=0; i<684; i++){
+        smlpieces1[i] = new QScatterSeries;
+        smlpieces2[i] = new QScatterSeries;
+    }
 
+    t_start = new Time;
+    t_end = new Time;
+    t_start->day.setDate(2009,2,4);
+    t_end->day.setDate(2010,10,23);
     DAU_loid1 = 0;
     DAU_loid2 = 0;
     top_la_low = -90;
     top_la_high = 90;
     top_lo_low = -180;
     top_lo_high = 180;
+    ckin_la_low = -90;
+    ckin_la_high = 90;
+    ckin_lo_low = -180;
+    ckin_lo_high = 180;
+    ckin_id_flag = false;
     cot_user_flag = 3;
     cot_user[0] = cot_user[1] = -1;
     top_single = false;
@@ -43,25 +68,25 @@ Function::Function(QWidget *parent) :
             d = ui->top_end_time->value();
             ui->top_start_time->setSliderPosition(d);
         }
-        ui->top_start_edit->setDate(t_start_top->day.addDays(d));
+        ui->top_start_edit->setDate(t_start->day.addDays(d));
     });
     connect(ui->top_end_time,&QSlider::valueChanged,[=](int d){
         if (d < ui->top_start_time->value()){
             d = ui->top_start_time->value();
         }
-        ui->top_end_edit->setDate(t_start_top->day.addDays(d));
+        ui->top_end_edit->setDate(t_start->day.addDays(d));
     });
     connect(ui->top_start_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day > ui->top_end_edit->date()){
             day = ui->top_end_edit->date();
         }
-        ui->top_start_time->setValue(t_start_top->day.daysTo(day));
+        ui->top_start_time->setValue(t_start->day.daysTo(day));
     });
     connect(ui->top_end_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day < ui->top_start_edit->date()){
             day = ui->top_start_edit->date();
         }
-        ui->top_end_time->setValue(t_start_top->day.daysTo(day));
+        ui->top_end_time->setValue(t_start->day.daysTo(day));
     });
 
 
@@ -99,54 +124,86 @@ Function::Function(QWidget *parent) :
         if (d > ui->cot_end_time->value()){
             d = ui->cot_end_time->value();
         }
-        ui->cot_start_edit->setDate(t_start_cot->day.addDays(d));
+        ui->cot_start_edit->setDate(t_start->day.addDays(d));
     });
     connect(ui->cot_end_time,&QSlider::valueChanged,[=](int d){
         if (d < ui->cot_start_time->value()){
             d = ui->cot_start_time->value();
         }
-        ui->cot_end_edit->setDate(t_start_cot->day.addDays(d));
+        ui->cot_end_edit->setDate(t_start->day.addDays(d));
     });
     connect(ui->cot_start_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day > ui->cot_end_edit->date()){
             day = ui->cot_end_edit->date();
         }
-        ui->cot_start_time->setValue(t_start_cot->day.daysTo(day));
+        ui->cot_start_time->setValue(t_start->day.daysTo(day));
     });
     connect(ui->cot_end_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day < ui->cot_start_edit->date()){
             day = ui->cot_start_edit->date();
         }
-        ui->cot_end_time->setValue(t_start_cot->day.daysTo(day));
+        ui->cot_end_time->setValue(t_start->day.daysTo(day));
     });
 
 
 //Checkin connect
+    //time
     connect(ui->ckin_start_time_slider,&QSlider::valueChanged,[=](int d){
         if (d > ui->ckin_end_time_slider->value()){
             d = ui->ckin_end_time_slider->value();
         }
-        ui->dateTimeEdit->setDate(t_start_ckin->day.addDays(d));
+        ui->dateTimeEdit->setDate(t_start->day.addDays(d));
     });
     connect(ui->ckin_end_time_slider,&QSlider::valueChanged,[=](int d){
         if (d < ui->ckin_start_time_slider->value()){
             d = ui->ckin_start_time_slider->value();
         }
-        ui->dateTimeEdit_2->setDate(t_start_ckin->day.addDays(d));
+        ui->dateTimeEdit_2->setDate(t_start->day.addDays(d));
     });
     connect(ui->dateTimeEdit,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day > ui->dateTimeEdit_2->date()){
             day = ui->dateTimeEdit_2->date();
         }
-        ui->ckin_start_time_slider->setValue(t_start_ckin->day.daysTo(day));
+        ui->ckin_start_time_slider->setValue(t_start->day.daysTo(day));
     });
     connect(ui->dateTimeEdit_2,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day < ui->dateTimeEdit->date()){
             day = ui->dateTimeEdit->date();
         }
-        ui->ckin_end_time_slider->setValue(t_start_ckin->day.daysTo(day));
+        ui->ckin_end_time_slider->setValue(t_start->day.daysTo(day));
     });
 
+    //latitude & longitude
+    connect(ui->la_low,&QSlider::valueChanged,[=](float d){
+        if (d > ui->la_high->value()){
+            d = ui->la_high->value();
+        }
+        ckin_la_low = d/10.0;
+        ui->ckin_la_low->setText(QString::number(d/10.0));
+    });
+
+    connect(ui->la_high,&QSlider::valueChanged,[=](float d){
+        if (d < ui->la_low->value()){
+            d = ui->la_low->value();
+        }
+        ckin_la_high = d/10.0;
+        ui->ckin_la_high->setText(QString::number(d/10.0));
+    });
+    connect(ui->lo_low,&QSlider::valueChanged,[=](float d){
+        if (d > ui->lo_high->value()){
+            d = ui->lo_high->value();
+        }
+        ckin_lo_low = d/10.0;
+        ui->ckin_lo_low->setText(QString::number(d/10.0));
+    });
+
+    connect(ui->lo_high,&QSlider::valueChanged,[=](float d){
+        if (d < ui->lo_low->value()){
+            d = ui->lo_low->value();
+        }
+        ckin_lo_high = d/10.0;
+        ui->ckin_lo_high->setText(QString::number(d/10.0));
+    });
 
 // DAU connect
     //time
@@ -154,26 +211,92 @@ Function::Function(QWidget *parent) :
         if (d > ui->dau_time_high->value()){
             d = ui->dau_time_high->value();
         }
-        ui->dateTimeEdit_3->setDate(t_start_dau->day.addDays(d));
+        ui->dateTimeEdit_3->setDate(t_start->day.addDays(d));
     });
     connect(ui->dau_time_high,&QSlider::valueChanged,[=](int d){
         if (d < ui->dau_time_low->value()){
             d = ui->dau_time_low->value();
         }
-        ui->dateTimeEdit_4->setDate(t_start_dau->day.addDays(d));
+        ui->dateTimeEdit_4->setDate(t_start->day.addDays(d));
     });
     connect(ui->dateTimeEdit_3,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day > ui->dateTimeEdit_4->date()){
             day = ui->dateTimeEdit_4->date();
         }
-        ui->dau_time_low->setValue(t_start_dau->day.daysTo(day));
+        ui->dau_time_low->setValue(t_start->day.daysTo(day));
     });
     connect(ui->dateTimeEdit_4,&QDateTimeEdit::dateChanged,[=](QDate day){
         if (day < ui->dateTimeEdit_3->date()){
             day = ui->dateTimeEdit_3->date();
         }
-        ui->dau_time_high->setValue(t_start_dau->day.daysTo(day));
+        ui->dau_time_high->setValue(t_start->day.daysTo(day));
     });
+
+
+// qml map connect
+    //send start signal
+    connect(this,SIGNAL(SendMapStart()),item,SIGNAL(start_map()));
+    connect(this,SIGNAL(SendHeatMapStart()),item_heat,SIGNAL(start_heatmap()));
+    //send center(user_id)
+    connect(this,SIGNAL(SendMapLocation(double,double)),item,SIGNAL(rec_center(double,double)));
+    connect(this,SIGNAL(SendHeatMapLocation(int, int)),item_heat,SIGNAL(rec_heatlocation(int, int)));
+
+    //connect
+    connect(ui->tra_str_sld,&QSlider::valueChanged,[=](int d){
+        if (d > ui->tra_end_sld->value()){
+            d = ui->tra_end_sld->value();
+            ui->tra_str_sld->setSliderPosition(d);
+        }
+        ui->tra_str_edit->setDate(t_start->day.addDays(d));
+    });
+    connect(ui->tra_end_sld,&QSlider::valueChanged,[=](int d){
+        if (d < ui->tra_str_sld->value()){
+            d = ui->tra_str_sld->value();
+        }
+        ui->tra_end_edit->setDate(t_start->day.addDays(d));
+    });
+    connect(ui->tra_str_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day > ui->tra_end_edit->date()){
+            day = ui->tra_end_edit->date();
+        }
+        ui->tra_str_sld->setValue(t_start->day.daysTo(day));
+    });
+    connect(ui->tra_end_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day < ui->tra_str_edit->date()){
+            day = ui->tra_str_edit->date();
+        }
+        ui->tra_end_sld->setValue(t_start->day.daysTo(day));
+    });
+
+
+// Heat Map
+    //connect
+    connect(ui->heat_str_sld,&QSlider::valueChanged,[=](int d){
+        if (d > ui->heat_end_sld->value()){
+            d = ui->heat_end_sld->value();
+            ui->heat_str_sld->setSliderPosition(d);
+        }
+        ui->heat_str_edit->setDate(t_start->day.addDays(d));
+    });
+    connect(ui->heat_end_sld,&QSlider::valueChanged,[=](int d){
+        if (d < ui->heat_str_sld->value()){
+            d = ui->heat_str_sld->value();
+        }
+        ui->heat_end_edit->setDate(t_start->day.addDays(d));
+    });
+    connect(ui->heat_str_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day > ui->heat_end_edit->date()){
+            day = ui->heat_end_edit->date();
+        }
+        ui->heat_str_sld->setValue(t_start->day.daysTo(day));
+    });
+    connect(ui->heat_end_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day < ui->heat_str_edit->date()){
+            day = ui->heat_str_edit->date();
+        }
+        ui->heat_end_sld->setValue(t_start->day.daysTo(day));
+    });
+
 }
 
 Function::~Function()
@@ -185,22 +308,28 @@ void Function::rec_dataset(Datas da){
     DataSet.append(da);
 }
 
+void Function::rec_data(QVector<Datas> d){
+    DataSet = d;
+    qDebug() << DataSet.size();
+}
+
 void Function::rec_finished(int a){
     if (a == -1){
-        qDebug()<<"111";
+        qDebug()<<"receive success";
+        qDebug() << DataSet.size();
         start();
     }
 }
 
 void Function::start(){
     max_size = DataSet.size();
-    bool fu[55000];
-    bool fo[25000];
+    bool fu[25000];
+    bool fo[55000];
     for (int i=0; i<55000; i++) {
         if (i < 25000){
-            fo[i] = false;
+            fu[i] = false;
         }
-        fu[i] = false;
+        fo[i] = false;
     }
 
     ui->cot_user_Box1->addItem("All");
@@ -210,6 +339,7 @@ void Function::start(){
     ui->Timestep->addItem("Ten Days");
     ui->Timestep->addItem("One Month");
     ui->Timestep->addItem("One Year");
+    ui->locationBox->addItem("Select by Latitude & Longitude");
 
     for (int i=0; i<DataSet.size(); i++){
         if (!fu[DataSet.at(i).User_Id]){
@@ -217,26 +347,22 @@ void Function::start(){
             ui->top_user_Box->addItem(QString::number(DataSet.at(i).User_Id));
             ui->cot_user_Box1->addItem(QString::number(DataSet.at(i).User_Id));
             ui->cot_user_Box2->addItem(QString::number(DataSet.at(i).User_Id));
+            ui->tra_user_box->addItem(QString::number(DataSet.at(i).User_Id));
+            ui->sml_user_box->addItem(QString::number(DataSet.at(i).User_Id));
+            ui->sml_user_box_2->addItem(QString::number(DataSet.at(i).User_Id));
         }
         if (!fo[DataSet.at(i).Location_Id]){
             fo[DataSet.at(i).Location_Id] = true;
             ui->locationBox->addItem(QString::number(DataSet.at(i).Location_Id));
         }
     }
+    qDebug() << DataSet.at(DataSet.size()-1).User_Id;
 
-    Top10POIs();
-    ComprasionOfTop();
-    NumberOfCheckin();
-    DAU();
+    //Top10POIs();
+    //ComprasionOfTop();
+    //NumberOfCheckin();
+    //DAU();
 }
-
-void Function::test(){
-    Top10POIs();
-    ComprasionOfTop();
-    NumberOfCheckin();
-    DAU();
-}
-
 
 void Function::handleMarkerClicked()
 {
@@ -305,9 +431,10 @@ void Function::Top10POIs(){
         delete ui->chartTop->layout();
     }
 
+    xTitle->clear();
+
     QVector<lct_cnt> u[55000];
     QVector<lct_cnt> u1[55000];
-    QStringList* xTitle = new QStringList;
     QChart* chart = new QChart();
     QBarSeries* barTop = new QBarSeries;
     QBarSet *tmp_bar[10];
@@ -388,7 +515,8 @@ void Function::Top10POIs(){
     QBarCategoryAxis *axisX = new QBarCategoryAxis();
     axisX->append(*xTitle);
     chart->createDefaultAxes();
-    axisX->setRange(xTitle->at(0),xTitle->at(10));
+    int xmax = std::min(10,xTitle->size()-1);
+    axisX->setRange(xTitle->at(0),xTitle->at(xmax));
     chart->setAxisX(axisX,barTop); //x_range
     if (!top_single) chart->axisX()->hide();
 
@@ -413,7 +541,6 @@ void Function::Top10POIs(){
     QGridLayout *baseLayout = new QGridLayout();
     baseLayout->addWidget(view, 1, 0);
     ui->chartTop->setLayout(baseLayout);
-
 }
 
 void Function::ComprasionOfTop(){
@@ -588,7 +715,10 @@ void Function::NumberOfCheckin(){
     }
 
     for (int i=0; i<DataSet.size(); i++){
-        if (DataSet.at(i).Location_Id == ckin_loid && DataSet.at(i).t.day <= t_end_ckin->day && DataSet.at(i).t.day >= t_start_ckin->day){
+        if (((ckin_id_flag && DataSet.at(i).Location_Id == ckin_loid) ||
+             (!ckin_id_flag && DataSet.at(i).latitude >= ckin_la_low && DataSet.at(i).latitude <= ckin_la_high &&
+                               DataSet.at(i).longitude >= ckin_lo_low && DataSet.at(i).longitude <= ckin_lo_high)) &&
+             DataSet.at(i).t.day <= t_end_ckin->day && DataSet.at(i).t.day >= t_start_ckin->day){
             int tmp = t_start_ckin->day.daysTo(DataSet.at(i).t.day);
             cnt[tmp]++;
         }
@@ -802,6 +932,168 @@ void Function::DAU(){
 
 }
 
+void Function::Trajectory(){
+    if (ui->mapWidget->layout()){
+        delete ui->mapWidget->layout();
+    }
+    t_start_tra = new Time(ui->tra_str_edit->date(),ui->tra_str_edit->time());
+    t_end_tra = new Time(ui->tra_end_edit->date(),ui->tra_end_edit->time());
+    emit SendMapStart();
+    int cnt = 0;
+    for (int i=0; i<DataSet.size(); i++){
+        float la = DataSet.at(i).latitude;
+        float lo = DataSet.at(i).longitude;
+        double la1 = la;
+        double lo1 = lo;
+        if (DataSet.at(i).User_Id == tra_user &&
+            DataSet.at(i).t.day >= t_start_tra->day && DataSet.at(i).t.day <= t_end_tra->day &&
+            cnt < 200){
+            cnt++;
+            Delay_MSec(500);
+            emit SendMapLocation(la1, lo1);
+        }
+    }
+}
+
+void Function::HeatOfMap(){
+    if (ui->heatmapWidget->layout()){
+        delete ui->heatmapWidget->layout();
+    }
+    for(int i=0; i<700; i++){
+        piece[i] = 0;
+    }
+    t_start_heat = new Time(ui->heat_str_edit->date(),ui->heat_str_edit->time());
+    t_end_heat = new Time(ui->heat_end_edit->date(),ui->heat_end_edit->time());
+    emit SendHeatMapStart();
+    for (int i=0; i<DataSet.size(); i++){
+        Datas tmp = DataSet.at(i);
+        float la = -tmp.latitude/10 + 9;
+        float lo = -tmp.longitude/10 + 18;
+
+        int row = la;
+        int col = lo;
+        int index = row * 36 + col;
+        if (tmp.t.day <= t_end_heat->day && tmp.t.day >= t_start_heat->day){
+            piece[index]++;
+        }
+    }
+    for (int i=0; i<684; i++){
+        //qDebug() << i << piece[i] << endl;
+        emit SendHeatMapLocation(i, piece[i]);
+    }
+}
+
+void Function::SimilarityOfUsers(){
+    for (int i=0; i<700; i++){
+        u1_piece[i] = 0;
+        u2_piece[i] = 0;
+    }
+
+    for (int i=0; i<684; i++){
+        smlpieces1[i]->clear();
+        smlpieces2[i]->clear();
+    }
+    int tmp_size = smlchart->series().size();
+    for (int i=0; i<tmp_size; i++){
+        smlchart->removeSeries(smlchart->series().at(0));
+    }
+
+    if (ui->sml_chart1->layout()){
+        delete ui->sml_chart1->layout();
+    }
+
+    t_start_sml = new Time(ui->sml_str_edit->date(),ui->sml_str_edit->time());
+    t_end_sml = new Time(ui->sml_end_edit->date(),ui->sml_end_edit->time());
+
+    double sml1 = 0, sml2 = 0, sml  = 0;
+    double inner=0, length1=0, length2=0;
+    double ans1=0, ans2=0;
+    int u1_max = 50, u2_max = 50;
+    QColor c1[700];
+    QColor c2[700];
+
+    /////////for debug
+    //sml_user1 = 3;
+    //sml_user2 = 5;
+
+    for (int i=0; i<DataSet.size(); i++){
+        Datas tmp = DataSet.at(i);
+        if (tmp.t.day <= t_end_sml->day && tmp.t.day >= t_start_sml->day){
+            if (tmp.User_Id == sml_user1){
+                int row = -tmp.latitude/10 + 9;
+                int col = -tmp.longitude/10 + 18;
+                int index = row * 36 + col;
+                u1_piece[index]++;
+                u1_max = std::max(u1_max, u1_piece[index]);
+            }
+            if (tmp.User_Id == sml_user2){
+                int row = -tmp.latitude/10 + 9;
+                int col = -tmp.longitude/10 + 18;
+                int index = row * 36 + col;
+                u2_piece[index]++;
+                u2_max = std::max(u2_max, u2_piece[index]);
+            }
+        }
+    }
+
+    for (int i=0; i<684; i++){
+        inner += u1_piece[i] * u2_piece[i];
+        ans1 += u1_piece[i] * u1_piece[i];
+        ans2 += u2_piece[i] * u2_piece[i];
+
+        if (u1_piece[i] >0)
+            smlpieces1[i]->append((-i/36+8)*10,(-(i-(i/36)*36)+18)*10);
+        if (u2_piece[i] >0)
+            smlpieces2[i]->append((-i/36+8)*10,(-(i-(i/36)*36)+18)*10);
+
+        c1[i].setRgb(255, 111, 0);
+        c2[i].setRgb(104, 159, 56);
+        double alpha1 = std::min(1.0,(5*u1_piece[i]/u1_max + 0.1));
+        double alpha2 = std::min(1.0,(5*u2_piece[i]/u1_max + 0.1));
+        //if (u1_piece[i] == 0) alpha1 = 0.02;
+        //if (u2_piece[i] == 0) alpha2 = 0.05;
+        c1[i].setAlphaF(alpha1);
+        c2[i].setAlphaF(alpha2);
+        //qDebug() << alpha1 << alpha2;
+
+        smlpieces1[i]->setColor(c1[i]);
+        smlpieces2[i]->setColor(c2[i]);
+        smlpieces1[i]->setMarkerSize(60);
+        smlpieces2[i]->setMarkerSize(60);
+        smlpieces1[i]->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+        smlpieces2[i]->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
+
+        smlchart->addSeries(smlpieces1[i]);
+        smlchart->addSeries(smlpieces2[i]);
+    }
+    length1 = std::sqrt(ans1);
+    length2 = std::sqrt(ans2);
+
+    sml1 = inner/(length1*length2);
+    sml2 = std::min(length1,length2)/std::max(length1,length2);
+    sml = 0.8*sml1 + 0.2*sml2;
+    ui->lsml_label->setText(QString::number(sml1));
+    ui->vsml_label->setText(QString::number(sml2));
+    ui->gsml_label->setText(QString::number(sml));
+    qDebug() << sml1 << sml2 << sml;
+
+    cotchart->setAnimationOptions(QChart::GridAxisAnimations);
+    smlchart->createDefaultAxes();
+    smlchart->axes(Qt::Horizontal).first()->setRange(-60, 90);// x轴范围
+    smlchart->axes(Qt::Vertical).first()->setRange(-180, 60);// y轴范围
+    smlchart->axes(Qt::Horizontal).first()->setTitleText("Latitude");
+    smlchart->axes(Qt::Vertical).first()->setTitleText("Longitude");
+    smlchart->legend()->setVisible(false);
+
+    //show
+    QChartView *view = new QChartView(smlchart);
+    view->setRenderHint(QPainter::Antialiasing);
+    view->QChartView::setRubberBand(QChartView::RectangleRubberBand);
+    QGridLayout *baseLayout = new QGridLayout();
+    baseLayout->addWidget(view, 1, 0);
+    ui->sml_chart1->setLayout(baseLayout);
+}
+
 void Function::on_cot_user_Box1_currentIndexChanged(const QString &arg1)
 {
     if (arg1 == "All"){
@@ -832,13 +1124,13 @@ void Function::on_cot_user_Box2_currentIndexChanged(const QString &arg1)
 void Function::on_dau_lo1_textEdited(const QString &arg1)
 {
     DAU_loid1 = arg1.toInt();
-    //DAU();
+    DAU();
 }
 
 void Function::on_dau_lo2_textEdited(const QString &arg1)
 {
     DAU_loid2 = arg1.toInt();
-    //DAU();
+    DAU();
 }
 
 void Function::on_top_user_Box_currentIndexChanged(const QString &arg1)
@@ -856,8 +1148,15 @@ void Function::on_top_user_Box_currentIndexChanged(const QString &arg1)
 
 void Function::on_locationBox_currentIndexChanged(const QString &arg1)
 {
-    ckin_loid = arg1.toInt();
-    NumberOfCheckin();
+    if (arg1 == "Select by Latitude & Longitude"){
+        ckin_id_flag = false;
+    }
+
+    else {
+        ckin_id_flag = true;
+        ckin_loid = arg1.toInt();
+        NumberOfCheckin();
+    }
 }
 
 void Function::on_step_plus_clicked()
@@ -903,7 +1202,63 @@ void Function::on_Timestep_currentIndexChanged(const QString &arg1)
 void Function::on_stepEdit_textChanged(const QString &arg1)
 {
     step = arg1.toInt();
-    //DAU();
+}
+
+void Function::on_tra_user_box_currentIndexChanged(const QString &arg1)
+{
+    tra_user = arg1.toInt();
+}
+
+void Function::on_cot_ok_clicked()
+{
+    ComprasionOfTop();
+}
+
+void Function::on_top_ok_clicked()
+{
+    Top10POIs();
+}
+
+void Function::on_ckin_ok_clicked()
+{
+    NumberOfCheckin();
+}
+
+void Function::on_dau_ok_clicked()
+{
+    DAU();
+}
+
+void Function::on_pushButton_clicked()
+{
+    Trajectory();
+}
+
+void Function::on_heat_ok_clicked()
+{
+    HeatOfMap();
+}
+
+void Function::on_sml_ok_clicked()
+{
+    SimilarityOfUsers();
+}
+
+void Function::Delay_MSec(unsigned int msec)
+{
+    QEventLoop loop;
+    QTimer::singleShot(msec, &loop, SLOT(quit()));
+    loop.exec();
+}
+
+void Function::on_sml_user_box_currentIndexChanged(const QString &arg1)
+{
+    sml_user1 = arg1.toInt();
+}
+
+void Function::on_sml_user_box_2_currentIndexChanged(const QString &arg1)
+{
+    sml_user2 = arg1.toInt();
 }
 
 

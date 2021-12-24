@@ -15,7 +15,7 @@ class Setting : public QThread
     Q_OBJECT
 
 public:
-    Setting(QWidget *parent, QVector<Datas>* &d);
+    Setting(QWidget *parent, QVector<Datas>*& d);
     ~Setting();
     QVector<Datas>*& ds;
 
@@ -37,10 +37,11 @@ private:
     QVector<float>* Latitude;
     QVector<float>* Longitude;
     QVector<QDate>* Times1;
-    QVector<Datas>* AfterSelect;
+    QVector<Datas> AfterSelect;
 
 signals:
     void SendDataset(Datas da);
+    void SendData(QVector<Datas> d);
     void SendFinishedSignal(int a);
 
 };

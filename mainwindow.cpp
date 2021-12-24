@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     //function
     fui = new Function(this);
     connect(Set_th2,&Setting::SendDataset,fui,&Function::rec_dataset);
+    connect(Set_th2,&Setting::SendData,fui,&Function::rec_data);
     connect(Set_th2,&Setting::SendFinishedSignal,fui,&Function::rec_finished);
 }
 
@@ -98,16 +99,24 @@ void MainWindow::FileOpen(){
                 "D:/",
                 tr("excel(*.csv);;All files(*.*)")
         );
+    QFile file(fileName);
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this, "Warning!", "Failed to open the video!");
+            return;
+        }
 
         if (fileName.isEmpty()) {
             QMessageBox::warning(this, "Warning!", "Failed to open the video!");
+            return;
         }
         else {
             th1->start();
             emit SendFile(fileName);
             oui->ui->Loading->setText("Loading...");
+            oui->ui->lineEdit->setText(fileName);
         }
-        oui->ui->lineEdit->setText(fileName);
 }
 
 void MainWindow::SlcUserid(){
@@ -184,6 +193,8 @@ void MainWindow::setRange(){
         QString tmp_lo = ui->lo_edit->text();
         emit SendLongitude(tmp_lo);
     }
+
+    //qDebug() << Dataset->size() << "Dataset";
 
     Set_th2->start();
     this->hide();

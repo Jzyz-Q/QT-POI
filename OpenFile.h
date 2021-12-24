@@ -14,7 +14,7 @@ class Openf : public QThread
     Q_OBJECT
 
 public:
-    Openf(QWidget *parent, QVector<Datas>* &d);
+    Openf(QWidget *parent, QVector<Datas>*& d);
     ~Openf();
     void rec(QString fn);
 
