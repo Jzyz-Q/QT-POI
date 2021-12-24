@@ -135,7 +135,7 @@ private slots:
     void begin();
     void SlcUserid();
     void SlcLocationid();
-    void SlcTime();
+    //void SlcTime();
     void SlcLo();
     void SlcLa();
     void setRange();
@@ -149,7 +149,7 @@ private:
     Openf* th1;
     Setting* Set_th2;
 
-    bool userid_flag, locationid_flag, time_flag, lo_flag, la_flag;
+    bool userid_flag, locationid_flag, lo_flag, la_flag;
 
 signals:
     void SendFile(QString fileName);
@@ -157,7 +157,5 @@ signals:
     void SendLocations(QString locations);
     void SendLatitude(QString latitude);
     void SendLongitude(QString longitude);
-    void SendDays(QDate daystart, QDate dayend);
-
 };
 #endif // MAINWINDOW_H

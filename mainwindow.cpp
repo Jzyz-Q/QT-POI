@@ -25,14 +25,16 @@ MainWindow::MainWindow(QWidget *parent)
     Dataset = new QVector<Datas>;
 
     ui->setupUi(this);
+
     oui = new Dialog;
-    oui->setWindowFlags(Qt::WindowStaysOnTopHint);
+    //oui->setWindowFlags(Qt::WindowStaysOnTopHint);    //显示在最前方
+    oui->setWindowTitle("Open File");
     oui->show();
 
     //read in
     th1 = new Openf(this,Dataset);
     oui->ui->lineEdit->setPlaceholderText(" There are currently no files listed, please click \"browsing\".");
-    connect(oui->ui->Open,SIGNAL(clicked()),this,SLOT(FileOpen()));
+    connect(oui->ui->Open,SIGNAL(clicked(bool)),this,SLOT(FileOpen()));
     connect(oui->ui->begin,SIGNAL(clicked()),this,SLOT(begin()));
     connect(this,&MainWindow::SendFile,th1,&Openf::rec,Qt::AutoConnection);
     connect(th1,&Openf::SendToMain,this,&MainWindow::RecFromOp);
@@ -40,21 +42,23 @@ MainWindow::MainWindow(QWidget *parent)
     //set range
     userid_flag = false;
     locationid_flag = false;
-    time_flag = false;
     lo_flag = false;
     la_flag = false;
 
     ui->userid_edit->setPlaceholderText("eg: 1;3;4");
     ui->locationid_edit->setPlaceholderText("eg: 1;3;4");
-    ui->lo_edit->setPlaceholderText("eg: 30.24-31.35");
-    ui->la_edit->setPlaceholderText("eg: 30.24-31.35");
+    ui->lo_edit->setPlaceholderText("eg: 30.24;31.35");
+    ui->la_edit->setPlaceholderText("eg: 30.24;31.35");
     ui->fctBox->addItem("Top10 POIs");
-    ui->fctBox->addItem("number of checking-ins");
-    ui->fctBox->addItem("dynamic POIs(change by time)");
+    ui->fctBox->addItem("Number of Checking-ins");
+    ui->fctBox->addItem("Comprasion Of Top POIs");
+    ui->fctBox->addItem("Daily Active Users");
+    ui->fctBox->addItem("Trajectory on Map");
+    ui->fctBox->addItem("Heat Map");
+    ui->fctBox->addItem("User Similarity");
 
     connect(ui->User_ID,SIGNAL(clicked()),this,SLOT(SlcUserid()));
     connect(ui->Location_ID,SIGNAL(clicked()),this,SLOT(SlcLocationid()));
-    connect(ui->Time,SIGNAL(clicked()),this,SLOT(SlcTime()));
     connect(ui->Longitude,SIGNAL(clicked()),this,SLOT(SlcLo()));
     connect(ui->Latitude,SIGNAL(clicked()),this,SLOT(SlcLa()));
 
@@ -64,7 +68,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this,&MainWindow::SendLocations,Set_th2,&Setting::rec_locations);
     connect(this,&MainWindow::SendLatitude,Set_th2,&Setting::rec_latitude);
     connect(this,&MainWindow::SendLongitude,Set_th2,&Setting::rec_longitude);
-    connect(this,&MainWindow::SendDays,Set_th2,&Setting::rec_days);
 
     //function
     fui = new Function(this);
@@ -79,7 +82,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::begin(){
-    qDebug()<<"Main ID:"<<QThread::currentThreadId()<<endl;
+    //qDebug()<<"Main ID:"<<QThread::currentThreadId()<<endl;
     oui->on_toolButton_clicked();
     this->show();
 }
@@ -88,6 +91,7 @@ void MainWindow::RecFromOp(int i){
     oui->ui->Openprogress->setValue(i);
     if (i == 1502535){
         oui->ui->Loading->setText("Upload Successful!");
+        th1->quit();
     }
 }
 
@@ -101,7 +105,7 @@ void MainWindow::FileOpen(){
         );
     QFile file(fileName);
 
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QMessageBox::warning(this, "Warning!", "Failed to open the video!");
             return;
@@ -137,15 +141,6 @@ void MainWindow::SlcLocationid(){
     }
 }
 
-void MainWindow::SlcTime(){
-    if (ui->Time->isChecked()){
-        time_flag = true;
-    }
-    else {
-        time_flag = false;
-    }
-}
-
 void MainWindow::SlcLo(){
     if (ui->Longitude->isChecked()){
         lo_flag = true;
@@ -178,12 +173,6 @@ void MainWindow::setRange(){
         emit SendLocations(tmp_lctid);
     }
 
-    if (time_flag){
-        QDate tmp_t1 = ui->dateEdit->date();
-        QDate tmp_t2 = ui->dateEdit_2->date();
-        emit SendDays(tmp_t1, tmp_t2);
-    }
-
     if (la_flag){
         QString tmp_la = ui->la_edit->text();
         emit SendLatitude(tmp_la);
@@ -202,6 +191,7 @@ void MainWindow::setRange(){
 }
 
 void MainWindow::startfunction(){
+    Set_th2->quit();
     fui->show();
 }
 

@@ -10,7 +10,6 @@
 #include <QQmlContext>
 #include "mainwindow.h"
 #include "Setting.h"
-#include "map.h"
 
 struct Datas;
 struct Time;

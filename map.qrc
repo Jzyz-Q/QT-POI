@@ -1,7 +1,15 @@
 <RCC>
     <qresource prefix="/">
         <file>map.qml</file>
-        <file>location.png</file>
         <file>location1.png</file>
+        <file>gowalla.jpg</file>
+        <file>sign.png</file>
+        <file>mark.png</file>
+        <file>name.png</file>
+        <file>see.png</file>
+        <file>11.png</file>
+        <file>22.png</file>
+        <file>3.png</file>
+        <file>4.png</file>
     </qresource>
 </RCC>

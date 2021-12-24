@@ -297,6 +297,35 @@ Function::Function(QWidget *parent) :
         ui->heat_end_sld->setValue(t_start->day.daysTo(day));
     });
 
+
+// Similarity
+    //connect
+    connect(ui->sml_str_sld,&QSlider::valueChanged,[=](int d){
+        if (d > ui->sml_end_sld->value()){
+            d = ui->sml_end_sld->value();
+            ui->sml_str_sld->setSliderPosition(d);
+        }
+        ui->sml_str_edit->setDate(t_start->day.addDays(d));
+    });
+    connect(ui->sml_end_sld,&QSlider::valueChanged,[=](int d){
+        if (d < ui->sml_str_sld->value()){
+            d = ui->sml_str_sld->value();
+        }
+        ui->sml_end_edit->setDate(t_start->day.addDays(d));
+    });
+    connect(ui->sml_str_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day > ui->sml_end_edit->date()){
+            day = ui->sml_end_edit->date();
+        }
+        ui->sml_str_sld->setValue(t_start->day.daysTo(day));
+    });
+    connect(ui->sml_end_edit,&QDateTimeEdit::dateChanged,[=](QDate day){
+        if (day < ui->sml_str_edit->date()){
+            day = ui->sml_str_edit->date();
+        }
+        ui->sml_end_sld->setValue(t_start->day.daysTo(day));
+    });
+
 }
 
 Function::~Function()
