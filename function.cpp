@@ -6,6 +6,7 @@
 #include "iostream"
 #include "cmath"
 #include <synchapi.h>
+#include <QOpenGLFramebufferObject>
 
 struct lct_cnt;
 struct Time;
@@ -91,34 +92,6 @@ Function::Function(QWidget *parent) :
 
 
 //ComprasionTop10 connect
-    //la&lo
-    connect(ui->laSlider_low,&QSlider::valueChanged,[=](int d){
-        if (d > ui->laSlider_high->value()){
-            d = ui->laSlider_high->value();
-        }
-        top_la_low = d;
-    });
-
-    connect(ui->laSlider_high,&QSlider::valueChanged,[=](int d){
-        if (d < ui->laSlider_low->value()){
-            d = ui->laSlider_low->value();
-        }
-        top_la_high = d;
-    });
-    connect(ui->cot_lo_low,&QSlider::valueChanged,[=](int d){
-        if (d > ui->cot_lo_high->value()){
-            d = ui->cot_lo_high->value();
-        }
-        top_lo_low = d;
-    });
-
-    connect(ui->cot_lo_high,&QSlider::valueChanged,[=](int d){
-        if (d < ui->cot_lo_low->value()){
-            d = ui->cot_lo_low->value();
-        }
-        top_lo_high = d;
-    });
-
     //time slider
     connect(ui->cot_start_time,&QSlider::valueChanged,[=](int d){
         if (d > ui->cot_end_time->value()){
@@ -1104,12 +1077,11 @@ void Function::SimilarityOfUsers(){
     ui->lsml_label->setText(QString::number(sml1));
     ui->vsml_label->setText(QString::number(sml2));
     ui->gsml_label->setText(QString::number(sml));
-    qDebug() << sml1 << sml2 << sml;
 
     cotchart->setAnimationOptions(QChart::GridAxisAnimations);
     smlchart->createDefaultAxes();
     smlchart->axes(Qt::Horizontal).first()->setRange(-60, 90);// x轴范围
-    smlchart->axes(Qt::Vertical).first()->setRange(-180, 60);// y轴范围
+    smlchart->axes(Qt::Vertical).first()->setRange(-180, 40);// y轴范围
     smlchart->axes(Qt::Horizontal).first()->setTitleText("Latitude");
     smlchart->axes(Qt::Vertical).first()->setTitleText("Longitude");
     smlchart->legend()->setVisible(false);

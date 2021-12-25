@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     oui = new Dialog;
-    //oui->setWindowFlags(Qt::WindowStaysOnTopHint);    //显示在最前方
     oui->setWindowTitle("Open File");
     oui->show();
 
@@ -56,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->fctBox->addItem("Trajectory on Map");
     ui->fctBox->addItem("Heat Map");
     ui->fctBox->addItem("User Similarity");
+    ui->introduction->setStyleSheet("QTextBrowser{border-width:0;border-style:outset}");
 
     connect(ui->User_ID,SIGNAL(clicked()),this,SLOT(SlcUserid()));
     connect(ui->Location_ID,SIGNAL(clicked()),this,SLOT(SlcLocationid()));
@@ -71,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //function
     fui = new Function(this);
+    fui->setWindowTitle("Functions");
     connect(Set_th2,&Setting::SendDataset,fui,&Function::rec_dataset);
     connect(Set_th2,&Setting::SendData,fui,&Function::rec_data);
     connect(Set_th2,&Setting::SendFinishedSignal,fui,&Function::rec_finished);
@@ -90,6 +91,7 @@ void MainWindow::begin(){
 void MainWindow::RecFromOp(int i){
     oui->ui->Openprogress->setValue(i);
     if (i == 1502535){
+        th1->wait();
         oui->ui->Loading->setText("Upload Successful!");
         th1->quit();
     }
@@ -195,11 +197,49 @@ void MainWindow::startfunction(){
     fui->show();
 }
 
-
-
-
-
-
+void MainWindow::on_fctBox_currentIndexChanged(int index)
+{
+    switch (index) {
+    case 0:
+        ui->introduction->setText("  Here we have counted the ten most visited locations "
+                                  "by a specific user or all users(but no more than 10).");
+        break;
+    case 1:
+        ui->introduction->setText("  This feature compares the top10 of different users"
+                                  " on the basis of the statistics of the top10. The "
+                                  "coordinates of a point are its latitude and longitude."
+                                  " A user is represented by a dot of one color.");
+        break;
+    case 2:
+        ui->introduction->setText("  This section implements statistics on the "
+                                  "number of times a certain location ID or a certain"
+                                  " latitude and longitude range has been accessed "
+                                  "by all users.");
+        break;
+    case 3:
+        ui->introduction->setText("  In this part, we compared the change in "
+                                  "active users over time for two locations. When"
+                                  " you changes current steps of time, the dynamic"
+                                  " change of active users can be observed.");
+        break;
+    case 4:
+        ui->introduction->setText("  Select a user and you will be able to see the"
+                                  " track of his punch card on the map.");
+        break;
+    case 5:
+        ui->introduction->setText("  Here you will see on the map how hot each "
+                                  "location has been visited, the darker the color"
+                                  " the more times it has been visited");
+        break;
+    case 6:
+        ui->introduction->setText("  This part evaluates the similarity of two users "
+                                  "based on the locations they visit and the number of"
+                                  " times they clock in over a period of time");
+        break;
+    default:
+        break;
+    }
+}
 
 
 

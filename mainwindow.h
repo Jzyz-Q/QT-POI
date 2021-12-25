@@ -135,11 +135,12 @@ private slots:
     void begin();
     void SlcUserid();
     void SlcLocationid();
-    //void SlcTime();
     void SlcLo();
     void SlcLa();
     void setRange();
     void startfunction();
+
+    void on_fctBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

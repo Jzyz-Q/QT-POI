@@ -22,9 +22,6 @@ Setting::Setting(QWidget *parent, QVector<Datas> *&d)
     Locations = new QVector<int>;
     Latitude = new QVector<float>;
     Longitude = new QVector<float>;
-    Times1 = new QVector<QDate>;
-
-    //AfterSelect = new QVector<Datas>;
 }
 
 Setting::~Setting(){
@@ -40,16 +37,19 @@ void Setting::run(){
         if (((u_f && std::find(Users->begin(),Users->end(),tmp.User_Id) != Users->end()) || !u_f) &&
             ((lct_f && std::find(Locations->begin(),Locations->end(),tmp.Location_Id) != Locations->end()) || !lct_f) &&
             ((la_f && tmp.latitude <= Latitude->at(1) && tmp.latitude >= Latitude->at(0)) || !la_f) &&
-            ((lo_f && tmp.longitude <= Longitude->at(1) && tmp.longitude >= Longitude->at(0)) || !lo_f) &&
-            ((t_f && tmp.t.day <= Times1->at(1) && tmp.t.day >= Times1->at(0)) || !t_f))
+            ((lo_f && tmp.longitude <= Longitude->at(1) && tmp.longitude >= Longitude->at(0)) || !lo_f))
         {
             AfterSelect.append(tmp);
-            //emit SendDataset(tmp);
         }
     }
     qDebug()<< AfterSelect.size() <<endl;
     emit SendData(AfterSelect);
     u_f = lct_f = t_f = lo_f = la_f = false;
+
+    delete Users;
+    delete Locations;
+    delete Latitude;
+    delete Longitude;
     emit SendFinishedSignal(-1);
 }
 
@@ -105,13 +105,6 @@ void Setting::rec_longitude(QString longitude){
     }
 }
 
-void Setting::rec_days(QDate daystart, QDate dayend){
-    t_f = true;
-    Times1->clear();
-    Times1->append(daystart);
-    Times1->append(dayend);
-    //qDebug() << daystart.year() << " " << daystart.month() << " " << daystart.day() << endl;
-}
 
 
 
