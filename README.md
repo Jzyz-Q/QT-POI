@@ -25,7 +25,19 @@ View the introduction of each function
 - Comprasion of Top10 POIs: compares the top10 of different users (Different colors represent different users, and the diameter of the dot represents the number of times the location has been visited)
 - Number of Check-ins: show the number of times a certain location ID or a certain latitude and longitude range has been accessed by all users by line chart.
 - Daily Active Users: compared the change in active users over time for two locations.(line graph: the number of times the location has been accessed at the current time step; pie charts: the distribution of users visiting)   
-<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/top.png?raw=true" width=400/>&emsp;<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/cot.png?raw=true" width=400/>   
-<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/ckin.png?raw=true" width=400/>&emsp;<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/dau.png?raw=true" width=400/>
+<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/top.png?raw=true" width=380/>&emsp;<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/cot.png?raw=true" width=380/>   
+<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/ckin.png?raw=true" width=380/>&emsp;<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/dau.png?raw=true" width=380/>
 
+## Map-related Analysis
+- Trajectory of Users: plots the trajectory of the user's visit
+- Heat Map: plots the heat map over time
+<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/tra.png?raw=true" width=380/>&emsp;<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/heat.png?raw=true" width=380/>
+
+## Similarity Analysis
+Analyze the similarity of the two based on the location and number of visits by users
+Divide the map into 36x72 chunks, each spanning 5 longitudes and 5 latitudes.
+- Location Similarity: The similarity of the visited locations, calculated using the cosine similarity.
+- Visit Times Similarity: Similarity of the number of user visits
+
+<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/sml.png?raw=true" width="400px">
 
