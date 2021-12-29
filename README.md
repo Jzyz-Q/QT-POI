@@ -30,7 +30,7 @@ View the introduction of each function
 
 ## Map-related Analysis
 - Trajectory of Users: plots the trajectory of the user's visit
-- Heat Map: plots the heat map over time
+- Heat Map: plots the heat map over time   
 <img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/tra.png?raw=true" width=380/>&emsp;<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/heat.png?raw=true" width=380/>
 
 ## Similarity Analysis
