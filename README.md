@@ -34,7 +34,7 @@ View the introduction of each function
 <img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/tra.png?raw=true" width=380/>&emsp;<img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/heat.png?raw=true" width=380/>
 
 ## Similarity Analysis
-Analyze the similarity of the two based on the location and number of visits by users
+Analyze the similarity of the two based on the location and number of visits by users   
 Divide the map into 36x72 chunks, each spanning 5 longitudes and 5 latitudes.
 - Location Similarity: The similarity of the visited locations, calculated using the cosine similarity.
 - Visit Times Similarity: Similarity of the number of user visits
