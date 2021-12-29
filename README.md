@@ -16,6 +16,7 @@ Then click "OK, let's start!", jump to "welcome" page.
 Set the range of data of interest to the user  
 - User_ID / Location_ID: 1;3;4 means User_1 and User_3 and User_4;     
 - Latitude / longitude: 33;35 means 33-35;   
+
 View the introduction of each function   
 <img src="https://github.com/Jzyz-Q/QT-POI/blob/main/image/filter.png?raw=true" width="400px">
 
