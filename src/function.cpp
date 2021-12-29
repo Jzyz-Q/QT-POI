@@ -306,13 +306,9 @@ Function::~Function()
     delete ui;
 }
 
-void Function::rec_dataset(Datas da){
-    DataSet.append(da);
-}
 
 void Function::rec_data(QVector<Datas> d){
     DataSet = d;
-    qDebug() << DataSet.size();
 }
 
 void Function::rec_finished(int a){
@@ -359,11 +355,6 @@ void Function::start(){
         }
     }
     qDebug() << DataSet.at(DataSet.size()-1).User_Id;
-
-    //Top10POIs();
-    //ComprasionOfTop();
-    //NumberOfCheckin();
-    //DAU();
 }
 
 void Function::handleMarkerClicked()
@@ -1263,5 +1254,4 @@ void Function::on_sml_user_box_2_currentIndexChanged(const QString &arg1)
 {
     sml_user2 = arg1.toInt();
 }
-
 

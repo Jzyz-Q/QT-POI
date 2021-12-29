@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
@@ -1454,7 +1454,7 @@ font: 10pt &quot;Arial&quot;;</string>
        <x>10</x>
        <y>20</y>
        <width>1231</width>
-       <height>721</height>
+       <height>711</height>
       </rect>
      </property>
      <property name="resizeMode">
@@ -1465,7 +1465,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>290</x>
-       <y>790</y>
+       <y>772</y>
        <width>230</width>
        <height>35</height>
       </rect>
@@ -1508,7 +1508,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>670</x>
-       <y>790</y>
+       <y>772</y>
        <width>230</width>
        <height>35</height>
       </rect>
@@ -1551,7 +1551,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>670</x>
-       <y>840</y>
+       <y>822</y>
        <width>230</width>
        <height>16</height>
       </rect>
@@ -1576,7 +1576,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>290</x>
-       <y>840</y>
+       <y>822</y>
        <width>230</width>
        <height>16</height>
       </rect>
@@ -1595,7 +1595,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>760</y>
+       <y>742</y>
        <width>92</width>
        <height>23</height>
       </rect>
@@ -1612,7 +1612,7 @@ font: 10pt &quot;Arial&quot;;</string>
      <property name="geometry">
       <rect>
        <x>620</x>
-       <y>761</y>
+       <y>743</y>
        <width>177</width>
        <height>20</height>
       </rect>

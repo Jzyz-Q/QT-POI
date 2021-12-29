@@ -68,13 +68,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this,&MainWindow::SendLocations,Set_th2,&Setting::rec_locations);
     connect(this,&MainWindow::SendLatitude,Set_th2,&Setting::rec_latitude);
     connect(this,&MainWindow::SendLongitude,Set_th2,&Setting::rec_longitude);
-
-    //function
-    fui = new Function(this);
-    fui->setWindowTitle("Functions");
-    connect(Set_th2,&Setting::SendDataset,fui,&Function::rec_dataset);
-    connect(Set_th2,&Setting::SendData,fui,&Function::rec_data);
-    connect(Set_th2,&Setting::SendFinishedSignal,fui,&Function::rec_finished);
 }
 
 MainWindow::~MainWindow()
@@ -83,7 +76,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::begin(){
-    //qDebug()<<"Main ID:"<<QThread::currentThreadId()<<endl;
     oui->on_toolButton_clicked();
     this->show();
 }
@@ -184,17 +176,20 @@ void MainWindow::setRange(){
         QString tmp_lo = ui->lo_edit->text();
         emit SendLongitude(tmp_lo);
     }
-
-    //qDebug() << Dataset->size() << "Dataset";
-
-    Set_th2->start();
-    this->hide();
+    //Set_th2->start();
     startfunction();
 }
 
 void MainWindow::startfunction(){
+    Function* tmp_ui = new Function(this);
+    tmp_ui->setAttribute(Qt::WA_DeleteOnClose);
+    tmp_ui->setWindowTitle("Functions");
+    connect(Set_th2,&Setting::SendData,tmp_ui,&Function::rec_data);
+    connect(Set_th2,&Setting::SendFinishedSignal,tmp_ui,&Function::rec_finished);
+
+    Set_th2->start();
+    tmp_ui->show();
     Set_th2->quit();
-    fui->show();
 }
 
 void MainWindow::on_fctBox_currentIndexChanged(int index)

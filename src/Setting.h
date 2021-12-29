@@ -31,14 +31,13 @@ protected:
 private:
     bool u_f,lct_f,t_f,lo_f,la_f;
 
-    QVector<int>* Users;
-    QVector<int>* Locations;
-    QVector<float>* Latitude;
-    QVector<float>* Longitude;
+    QVector<int> Users;
+    QVector<int> Locations;
+    QVector<float> Latitude;
+    QVector<float> Longitude;
     QVector<Datas> AfterSelect;
 
 signals:
-    void SendDataset(Datas da);
     void SendData(QVector<Datas> d);
     void SendFinishedSignal(int a);
 

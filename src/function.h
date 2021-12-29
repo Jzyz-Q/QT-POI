@@ -79,7 +79,6 @@ signals:
 
 public slots:
     void start();
-    void rec_dataset(Datas da);
     void rec_data(QVector<Datas> d);
     void rec_finished(int a);
 
